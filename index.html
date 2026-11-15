@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=119">
+<link rel="stylesheet" href="css/site.css?v=120">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="llc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".42" stop-color="#e3e5e8"/><stop offset=".52" stop-color="#8e949c"/><stop offset=".72" stop-color="#cfd2d6"/><stop offset="1" stop-color="#f6f7f8"/></linearGradient><linearGradient id="llglass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a4a55"/><stop offset=".5" stop-color="#0d1317"/><stop offset="1" stop-color="#22303a"/></linearGradient><radialGradient id="llrim"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#b9bdc2"/><stop offset="1" stop-color="#6f757c"/></radialGradient><linearGradient id="llg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4ef2a"/><stop offset=".55" stop-color="#8bc303"/><stop offset="1" stop-color="#39d1fd"/></linearGradient></defs></svg>
@@ -173,12 +173,13 @@
     <div class="iphone" aria-label="Their Instagram reels on a phone">
       <span class="iphone-btn a"></span><span class="iphone-btn b"></span><span class="iphone-btn c"></span><span class="iphone-btn d"></span>
       <div class="iphone-screen">
-        <figure class="reel is-on" data-reel><img src="img/ig/DfmzskdTFq5.jpg" alt="Holding up a bottle of LuxPro in the shop" loading="lazy"><figcaption>Which one would you grab first? 👀</figcaption></figure>
-        <figure class="reel" data-reel><img src="img/ig/DfsRlXsQXDK.jpg" alt="Durability test on the Lux Brush" loading="lazy"><figcaption>Durability testing the Lux Brush</figcaption></figure>
-        <figure class="reel" data-reel><img src="img/ig/DfplbmAMJal.jpg" alt="A table of LuxPro bottles ready to ship" loading="lazy"><figcaption>Packing orders</figcaption></figure>
-        <figure class="reel" data-reel><img src="img/ig/DfukG8Vzi6s.jpg" alt="A white truck driving through an Arizona dust storm" loading="lazy"><figcaption>Arizona dust storm season</figcaption></figure>
-        <figure class="reel" data-reel><img src="img/ig/Dfp4aOjuFKC.jpg" alt="Bottles lined up on the shop bench" loading="lazy"><figcaption>Fresh batch</figcaption></figure>
+        <figure class="reel is-on" data-reel><video src="img/reels/DfmzskdTFq5.mp4" poster="img/reels/DfmzskdTFq5.jpg" muted playsinline preload="metadata" aria-label="Holding up LuxPro in the LusterLux shop"></video><figcaption>LuxPro, straight from the shop</figcaption></figure>
+        <figure class="reel" data-reel><video src="img/reels/DfnRGs7hhAL.mp4" poster="img/reels/DfnRGs7hhAL.jpg" muted playsinline preload="none" aria-label="A mock news report about LuxPro"></video><figcaption>Breaking news: LuxPro</figcaption></figure>
+        <figure class="reel" data-reel><video src="img/reels/DfsRlXsQXDK.mp4" poster="img/reels/DfsRlXsQXDK.jpg" muted playsinline preload="none" aria-label="Putting the LuxBrush through a durability test"></video><figcaption>Durability testing the LuxBrush</figcaption></figure>
+        <figure class="reel" data-reel><video src="img/reels/DfplbmAMJal.mp4" poster="img/reels/DfplbmAMJal.jpg" muted playsinline preload="none" aria-label="Telling the story of a batch of wrong labels"></video><figcaption>The day the wrong labels showed up</figcaption></figure>
+        <figure class="reel" data-reel><video src="img/reels/Dfp4aOjuFKC.mp4" poster="img/reels/Dfp4aOjuFKC.jpg" muted playsinline preload="none" aria-label="Relabelling bottles on the shop bench"></video><figcaption>Fixing the labels in 11 seconds</figcaption></figure>
         <div class="reel-ui">
+          <div class="reel-segs" data-reel-segs><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
           <div class="reel-top"><b>Reels</b><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><circle cx="12" cy="12.5" r="3.5"/></svg></div>
           <div class="reel-rail">
             <span><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
@@ -188,6 +189,9 @@
           <div class="reel-who"><img src="img/brand/badge.png" alt=""><b>lusterluxcarcare</b><span>Follow</span></div>
         </div>
       </div>
+      <div class="reel-tap" aria-hidden="true"><span data-reel-go="-1"></span><span data-reel-go="0"></span><span data-reel-go="1"></span></div>
+      <button type="button" class="reel-sound" data-reel-sound aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="off" d="M16 9l5 6M21 9l-5 6"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span>Tap for sound</span></button>
+      <span class="reel-paused" data-reel-paused aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
       <span class="iphone-island"></span>
     </div>
   </div>
@@ -277,7 +281,7 @@
 <div class="toast" data-toast role="status"></div>
 
 <script src="js/details.js?v=70"></script>
-<script src="js/site.js?v=109"></script>
+<script src="js/site.js?v=122"></script>
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
 <script type="module" src="js/bottle3d.js?v=71"></script>
 </body>

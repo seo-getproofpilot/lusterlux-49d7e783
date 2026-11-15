@@ -653,6 +653,7 @@
     function sample(im, st) {
       const r = im.getBoundingClientRect(), cr = card.getBoundingClientRect();
       const x0 = r.left - cr.left, y0 = r.top - cr.top, w = Math.round(r.width), h = Math.round(r.height);
+      if (!w || !h || !im.naturalWidth) return [];   // not laid out or not loaded yet: no particles this pass
       const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
       const o = oc.getContext('2d'); o.drawImage(im, 0, 0, w, h);
       const d = o.getImageData(0, 0, w, h).data, pts = [];
@@ -685,6 +686,7 @@
       const ir = imgs.luxpro.getBoundingClientRect();
       step = Math.max(2, Math.round(Math.sqrt((ir.width * ir.height * .82) / 5600)));
       const A = sample(imgs.luxpro, step), Bp = sample(imgs.ceramicx, step);
+      if (!A.length || !Bp.length) return;   // images not ready yet; the next resize or scroll pass retries
       N = Math.max(A.length, Bp.length);
       if (!ATOMS.length) buildMolecule();
       P = new Float32Array(N * 13);
@@ -839,10 +841,48 @@
   /* ================= INSTAGRAM PHONE: their reels, cycling ================= */
   (function insta() {
     const reels = $$('[data-reel]'); if (!reels.length) return;
-    let i = 0;
-    const show = () => reels.forEach((r, j) => r.classList.toggle('is-on', j === i));
-    show();
-    if (!reduce) setInterval(() => { i = (i + 1) % reels.length; show(); }, 3800);
+    const vids = reels.map(r => $('video', r)), segs = $$('[data-reel-segs] i b'), phone = $('.iphone');
+    const snd = $('[data-reel-sound]'), paused = $('[data-reel-paused]');
+    let i = 0, muted = true, inView = false, hold = false;
+    const cur = () => vids[i];
+    function go(n) {
+      vids[i].pause();
+      i = (n + vids.length) % vids.length;
+      reels.forEach((r, k) => r.classList.toggle('is-on', k === i));
+      segs.forEach((s, k) => s.style.width = k < i ? '100%' : '0%');
+      const v = cur(); v.preload = 'auto'; v.muted = muted; v.currentTime = 0;
+      vids[(i + 1) % vids.length].preload = 'metadata';
+      hold = false; paused.classList.remove('on');
+      if (inView) v.play().catch(() => {});
+    }
+    vids.forEach((v, k) => {
+      v.addEventListener('ended', () => { if (k === i) go(i + 1); });
+      v.addEventListener('timeupdate', () => { if (k === i && v.duration) segs[k].style.width = (v.currentTime / v.duration * 100) + '%'; });
+    });
+    // tap left / right to skip, middle to pause
+    $$('[data-reel-go]').forEach(t => t.addEventListener('click', () => {
+      const d = +t.dataset.reelGo;
+      if (d) return go(i + d);
+      const v = cur();
+      if (v.paused) { hold = false; v.play().catch(() => {}); paused.classList.remove('on'); } else { hold = true; v.pause(); paused.classList.add('on'); }
+    }));
+    snd.addEventListener('click', () => {
+      muted = !muted; vids.forEach(v => { v.muted = muted; });
+      snd.setAttribute('aria-pressed', !muted); snd.classList.toggle('is-on', !muted);
+      $('span', snd).textContent = muted ? 'Tap for sound' : 'Sound on';
+      if (!muted && cur().paused) { hold = false; cur().play().catch(() => {}); paused.classList.remove('on'); }
+    });
+    // only play while the phone is on screen; reduced motion waits for a tap
+    const setView = on => {
+      if (on === inView) return; inView = on;
+      if (inView && !hold && !reduce) cur().play().catch(() => {}); else cur().pause();
+    };
+    new IntersectionObserver(es => es.forEach(e => setView(e.isIntersecting)), { threshold: .35 }).observe(phone);
+    // backup for browsers that throttle observers: check the phone's position on scroll
+    let tick = 0;
+    const check = () => { tick = 0; const b = phone.getBoundingClientRect(), vis = Math.min(b.bottom, innerHeight) - Math.max(b.top, 0); setView(vis > b.height * .35); };
+    addEventListener('scroll', () => { if (!tick) tick = setTimeout(check, 120); }, { passive: true });
+    go(0); check();
   })();
 
   /* ================= GOODGUYS: auto-expire + calendar file ================= */
