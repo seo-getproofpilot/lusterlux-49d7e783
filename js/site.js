@@ -164,8 +164,7 @@
 
   /* ================= HERO: a waving hex sheet behind the copy + their products on real cars ================= */
   (function hero() {
-    const cv = $('[data-hex]');
-    if (cv) {
+    $$('[data-hex]').forEach(cv => {
       const ctx = cv.getContext('2d');
       let W = 0, H = 0, raf = 0, on = false, grad;
       const size = () => {
@@ -203,7 +202,7 @@
       size(); frame(0);
       addEventListener('resize', () => { size(); if (!raf) frame(performance.now()); });
       new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on && !raf && !reduce) raf = requestAnimationFrame(frame); }).observe(cv);
-    }
+    });
     const slides = $$('[data-slide]'), segs = $('[data-segs]'), label = $('[data-slide-name]');
     if (!slides.length || !segs) return;
     segs.innerHTML = slides.map((s, i) => `<button type="button" data-go="${i}" aria-label="Show ${s.dataset.name}"><i></i></button>`).join('');
@@ -260,15 +259,15 @@
      - VEHICLE sets the surfaces. UTV/ATV are mostly plastic, so RestorX comes along; ATVs have no cabin.
        Boats get cockpit products only: LusterLux lists its boat cleaners as coming soon.
      - GOAL sets the aisle. Lists are loose products; bundle() then swaps in any system that's cheaper. */
+  // vehicles: drawn silhouettes in the brand gradient (gradient defs live in index.html)
   const ICON = {
-    b: '<svg viewBox="0 0 48 48"><rect class="f" x="8" y="28" width="8" height="12" rx="1.5"/><rect class="f o" x="20" y="18" width="8" height="22" rx="1.5"/><rect class="f o" x="32" y="8" width="8" height="32" rx="1.5"/></svg>',
-    i: '<svg viewBox="0 0 48 48"><rect class="f" x="8" y="28" width="8" height="12" rx="1.5"/><rect class="f" x="20" y="18" width="8" height="22" rx="1.5"/><rect class="f o" x="32" y="8" width="8" height="32" rx="1.5"/></svg>',
-    e: '<svg viewBox="0 0 48 48"><rect class="f" x="8" y="28" width="8" height="12" rx="1.5"/><rect class="f" x="20" y="18" width="8" height="22" rx="1.5"/><rect class="f" x="32" y="8" width="8" height="32" rx="1.5"/></svg>',
-    car: '<svg viewBox="0 0 48 48"><path d="M4 31v-6l5-2 6-7h15l7 7 6 2v6"/><path d="M4 31h4m10 0h12m10 0h4"/><circle cx="13" cy="31" r="4.5"/><circle cx="35" cy="31" r="4.5"/><path d="M17 16.5l-2 6.5h20l-5-6.5"/></svg>',
-    utv: '<svg viewBox="0 0 48 48"><circle cx="12" cy="32" r="6"/><circle cx="37" cy="32" r="6"/><path d="M18 32h13"/><path d="M6 27l4-5h28l5 5"/><path d="M14 22V11h16l6 11"/><path d="M22 11v11"/></svg>',
-    atv: '<svg viewBox="0 0 48 48"><circle cx="11" cy="32" r="7"/><circle cx="37" cy="32" r="7"/><path d="M18 32h12"/><path d="M8 24l6-5h20l6 5"/><path d="M18 19v-4h10"/><path d="M33 19l3-7h5"/></svg>',
-    boat: '<svg viewBox="0 0 48 48"><path d="M4 27h40l-6 10H11z"/><path d="M15 27v-8h13l7 8"/><path d="M21 19v-6"/><path d="M4 42c4-2.5 7-2.5 10 0s6 2.5 10 0 7-2.5 10 0 6 2.5 10 0"/></svg>',
+    car: '<svg viewBox="0 0 160 64"><path class="vb" d="M6 46c0-6 4-8 12-9l26-4c8-7 18-12 32-13h24c10 0 18 4 26 11l20 4c6 1 10 5 10 10v3H6z"/><path class="vw" d="M58 32c6-6 12-8 20-8h20c6 0 11 3 15 7z"/><path class="vc" d="M120 39h12"/><circle class="vt" cx="40" cy="48" r="10"/><circle class="vr" cx="40" cy="48" r="4.2"/><circle class="vt" cx="128" cy="48" r="10"/><circle class="vr" cx="128" cy="48" r="4.2"/></svg>',
+    utv: '<svg viewBox="0 0 160 64"><path class="vc" d="M50 32l8-22h54l12 22M84 10v22M58 10l-8 22"/><path class="vb" d="M12 46l8-14h112l14 6 2 8z"/><path class="vw" d="M64 32l4-8h24l-2 8z"/><circle class="vt" cx="36" cy="48" r="13"/><circle class="vr" cx="36" cy="48" r="5.5"/><circle class="vt" cx="124" cy="48" r="13"/><circle class="vr" cx="124" cy="48" r="5.5"/></svg>',
+    atv: '<svg viewBox="0 0 160 64"><path class="vc" d="M104 28l6-14h12"/><path class="vb" d="M20 36c6-9 26-9 34 0h46c6-9 26-9 34 0l-6 8H26z"/><path class="vw" d="M58 28h34l-4 7H60z"/><circle class="vt" cx="38" cy="48" r="13"/><circle class="vr" cx="38" cy="48" r="5.5"/><circle class="vt" cx="118" cy="48" r="13"/><circle class="vr" cx="118" cy="48" r="5.5"/></svg>',
+    boat: '<svg viewBox="0 0 160 64"><path class="vw" d="M48 33l10-16h40l14 16z"/><path class="vc" d="M60 17l-4-6h44M80 17V9"/><path class="vb" d="M4 31l152 4-18 17H22z"/><path class="vc" d="M4 60c9-4 16-4 25 0s16 4 25 0 16-4 25 0 16 4 25 0 16-4 25 0 16 4 25 0"/></svg>',
   };
+  // experience tiles show the product each level usually starts with
+  const EXP = { b: ['img/cut/sm/luxpro.webp', 'Starts with LuxPro'], i: ['img/cut/sm/acc-foamx.webp', 'Steps up to the FoamX'], e: ['img/cut/sm/acc-luxcannon.webp', 'Runs the LuxCannon'] };
   const LV = { b: 'Beginner', i: 'Intermediate', e: 'Expert' }, VEH = { car: 'Car / Truck', utv: 'UTV', atv: 'ATV', boat: 'Boat' };
   // each goal tile shows the real product shot for that job
   const GOALS = {
@@ -283,9 +282,9 @@
   const goalsFor = v => v === 'boat' ? ['inside', 'glass', 'unsure'] : v === 'atv' ? ['quick', 'wash', 'shine', 'wheels', 'unsure'] : ['quick', 'wash', 'shine', 'wheels', 'inside', 'unsure'];
   const QS = [
     { key: 'lv', h: 'How much detailing have you done?', opts: () => [
-      ['b', 'Beginner', 'Car washes and gas-station vacuums. Never done it myself.'],
-      ['i', 'Intermediate', 'I wash it myself. I want it to look better and last longer.'],
-      ['e', 'Expert', 'I own a foam cannon and I know what a high spot is.']] },
+      ['b', 'Beginner', 'Never detailed it myself. I want easy.'],
+      ['i', 'Intermediate', 'I wash it myself and want it to look pro.'],
+      ['e', 'Expert', 'I own a foam cannon. I know what a high spot is.']] },
     { key: 'veh', h: 'What are you cleaning?', opts: () => [
       ['car', 'Car / Truck', 'Paint, glass, wheels, cabin.'], ['utv', 'UTV', 'Plastic panels, a cab, trail dust.'],
       ['atv', 'ATV', 'Plastic fenders, vinyl seat.'], ['boat', 'Boat', 'Vinyl seats, dash, trim, glass.']] },
@@ -325,21 +324,29 @@
   }
 
   (function quiz() {
-    const body = $('[data-quiz-body]'), bars = $$('[data-quiz-bars] i');
+    const body = $('[data-quiz-body]'), track = $('[data-quiz-track]');
     if (!body) return;
     const ans = {}; let at = 0;
-    const setBars = () => bars.forEach((b, i) => { b.classList.toggle('is-done', i < at); b.classList.toggle('is-on', i === at); });
+    const LABEL = { lv: 'Experience', veh: 'Vehicle', goal: 'Goal' };
+    const ansName = (k, v) => k === 'lv' ? LV[v] : k === 'veh' ? VEH[v] : GOALS[v][0];
+    function side() {
+      if (!track) return;
+      track.innerHTML = QS.map((q, i) => `<li class="${i < at ? 'is-done' : i === at ? 'is-on' : ''}"><span class="qt-n">${i < at ? '✓' : i + 1}</span>
+        <span class="qt-t"><small>${LABEL[q.key]}</small><b>${ans[q.key] ? ansName(q.key, ans[q.key]) : i === at ? 'Choosing…' : '—'}</b></span></li>`).join('');
+    }
     function ask() {
-      const q = QS[at], opts = q.opts(ans); setBars();
-      const photo = q.key === 'goal';
-      body.innerHTML = `<div class="quiz-q"><p class="quiz-n">${at + 1} / 3</p><h2 id="quiz-h">${q.h}</h2>
-        <div class="quiz-opts n${opts.length}${photo ? ' is-photo' : ''}">${opts.map(([v, b, s, pic], i) => `<button type="button" class="qopt${ans[q.key] === v ? ' is-picked' : ''}" data-v="${v}" style="--d:${i * 60}ms">
-          ${photo ? `<span class="qopt-bg"><img src="${pic}" alt="" loading="lazy"></span><span class="qopt-sp"></span>` : `<span class="qopt-ic">${ICON[v]}</span>`}
-          <b>${b}</b><span class="qopt-s">${s}</span><i class="qopt-go" aria-hidden="true">${ARROW}</i></button>`).join('')}</div>
+      const q = QS[at], opts = q.opts(ans); side();
+      const kind = q.key;
+      body.innerHTML = `<div class="quiz-q"><p class="quiz-n">Question ${at + 1} of 3</p><h2 id="quiz-h">${q.h}</h2>
+        <div class="quiz-opts n${opts.length} k-${kind}">${opts.map(([v, b, s, pic], i) => `<button type="button" class="qopt${ans[q.key] === v ? ' is-picked' : ''}" data-v="${v}" style="--d:${i * 60}ms">
+          ${kind === 'goal' ? `<span class="qopt-bg"><img src="${pic}" alt="" loading="lazy"></span><span class="qopt-sp"></span>`
+            : kind === 'lv' ? `<span class="qopt-prod"><img src="${EXP[v][0]}" alt="" loading="lazy"></span>`
+            : `<span class="qopt-veh">${ICON[v]}</span>`}
+          <b>${b}</b><span class="qopt-s">${s}</span>${kind === 'lv' ? `<span class="qopt-tag">${EXP[v][1]}</span>` : ''}<i class="qopt-go" aria-hidden="true">${ARROW}</i></button>`).join('')}</div>
         ${at ? '<button type="button" class="quiz-back" data-back>← Back</button>' : ''}</div>`;
     }
     function finish() {
-      at = 3; setBars();
+      at = 3; side();
       const p = picks(ans);
       body.innerHTML = `<div class="quiz-load"><p class="quiz-n">Stocking your aisle</p>
         <ul>${[LV[ans.lv], VEH[ans.veh], GOALS[ans.goal][0]].map((x, i) => `<li style="--d:${i * 220}ms"><span>✓</span>${x}</li>`).join('')}</ul>
@@ -388,10 +395,27 @@
         <div class="pcard-body"><button type="button" class="pcard-name" data-open="${k}">${nameHTML(k)}</button><p>${it.what}</p>${it.save ? `<span class="pcard-save">${it.save}</span>` : ''}</div>
         <div class="pcard-foot"><span class="pcard-px">${money(it.price)}</span><button class="pcard-add" type="button" data-add="${k}"><span>Add</span></button></div>
       </article>`; };
-  const groupsHTML = (keys, kitsFirst) => {
+  const SOON = { trail: ['Trail Foam', 'trail-foam-coming-soon'], boatext: ['Boat Exterior Cleaner', 'boat-exterior-cleaner-coming-soon'], boatint: ['Boat Interior Cleaner', 'boat-interior-cleaner-coming-soon'] };
+  const FILL = {
+    soap: [['soon', 'trail'], ['soon', 'boatext']], foamtool: [['kit', 'foamsys']], washtool: [['kit', 'ultimatesys']],
+    wheelchem: [['kit', 'rimtiresys'], ['kit', 'tirecaresys']], wheeltool: [['photo', 'img/wall/w40.webp', 'LuxWheelAssassin, before the brush']],
+    protect: [['kit', 'paintsys'], ['kit', 'waterlesssys']], intool: [['kit', 'completeinteriorsys'], ['kit', 'interiorsys'], ['soon', 'boatint']],
+  };
+  const fillTile = f => {
+    if (f[0] === 'soon') { const [n, h] = SOON[f[1]]; return `<a class="ftile carbon is-soon" href="https://lusterluxauto.com/products/${h}" target="_blank" rel="noopener"><span class="ftile-badge">Coming soon</span><img src="img/brand/badge.png" alt="" class="ftile-mark"><b>${n}</b><span>Listed on their store. Not out yet.</span><em>Watch for it →</em></a>`; }
+    if (f[0] === 'kit') { const it = C[f[1]]; return `<div class="ftile carbon is-kit"><span class="ftile-badge">${it.save.startsWith('Saves') ? it.save : 'Bundle'}</span><button type="button" class="ftile-img" data-open="${f[1]}" aria-label="Details for ${it.n}"><img src="${img(f[1])}" alt="" loading="lazy"></button><b>Get it as a set</b><span>${it.n}: ${it.what}</span><div class="ftile-foot"><strong>${money(it.price)}</strong><button type="button" class="pcard-add" data-add="${f[1]}"><span>Add</span></button></div></div>`; }
+    if (f[0] === 'photo') return `<figure class="ftile is-photo"><img src="${f[1]}" alt="" loading="lazy"><figcaption>${f[2]}</figcaption></figure>`;
+    return '';
+  };
+  const groupsHTML = (keys, kitsFirst, fill) => {
     const by = {}; keys.forEach(k => (by[typeOf(k)] = by[typeOf(k)] || []).push(k));
     const order = kitsFirst ? ['kit'].concat(Object.keys(TYPE).filter(t => t !== 'kit')) : Object.keys(TYPE);
-    return `<div class="pgroups">${order.filter(t => by[t]).map(t => `<div class="pgroup" style="--n:${Math.min(4, by[t].length)}"><h5>${TYPE[t]}</h5><div class="pgroup-grid">${by[t].map(card).join('')}</div></div>`).join('')}</div>`;
+    return `<div class="pgroups">${order.filter(t => by[t]).map(t => {
+      const extra = fill && FILL[t] ? FILL[t] : [];
+      const n = by[t].length + extra.length;
+      const quiz = fill && t === 'kit' && n % 4 ? `<a class="ftile carbon is-quiz" href="#quiz" style="grid-column:span ${4 - n % 4}"><span class="ftile-badge">Not sure?</span><b>Answer 3 questions and we’ll pick the set for you.</b><em>Find my products →</em></a>` : '';
+      return `<div class="pgroup" style="--n:${Math.min(4, n)}"><h5>${TYPE[t]}</h5><div class="pgroup-grid">${by[t].map(card).join('')}${extra.map(fillTile).join('')}${quiz}</div></div>`;
+    }).join('')}</div>`;
   };
 
   // the quiz lands here
@@ -441,7 +465,7 @@
     if (!wrap) return;
     const keysOf = types => Object.keys(C).filter(k => types.includes(typeOf(k)));
     chips.innerHTML = [['all', 'All'], ...AISLES.map(a => [a.cat, a.h])].map(([c, l], i) => `<button type="button" role="tab" data-cat="${c}" aria-selected="${i === 0}"><span>${l}</span></button>`).join('');
-    wrap.innerHTML = AISLES.map(a => `<div class="aisle" data-aisle="${a.cat}"><div class="aisle-bar"><h3>${a.h}</h3><p>${a.p}</p></div>${groupsHTML(keysOf(a.types))}</div>`).join('');
+    wrap.innerHTML = AISLES.map(a => `<div class="aisle" data-aisle="${a.cat}"><div class="aisle-bar"><h3>${a.h}</h3><p>${a.p}</p></div>${groupsHTML(keysOf(a.types), false, true)}</div>`).join('');
     let cat = 'all';
     function filter() {
       $$('.aisle', wrap).forEach(a => {
@@ -449,7 +473,7 @@
         $$('.pgroup', a).forEach(g => {
           let gAny = false;
           $$('.pcard', g).forEach(c => { const s = !easy.checked || c.dataset.easy === '1'; c.hidden = !s; gAny = gAny || s; });
-          g.hidden = !gAny; g.style.setProperty('--n', Math.min(4, $$('.pcard:not([hidden])', g).length || 1)); any = any || gAny;
+          g.hidden = !gAny; g.style.setProperty('--n', Math.min(4, $$('.pcard:not([hidden]), .ftile', g).length || 1)); any = any || gAny;
         });
         a.hidden = !((cat === 'all' || a.dataset.aisle === cat) && any);
       });
