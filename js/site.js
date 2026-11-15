@@ -174,6 +174,24 @@
     if (!('IntersectionObserver' in window)) return q.classList.add('is-lit');
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { q.classList.add('is-lit'); io.disconnect(); } }), { threshold: .25 });
     io.observe(q);
+    // dust motes drifting through the spotlight, catching the light as they turn
+    const cv = $('.ql-motes', q); if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = cv.getContext('2d'); let W = 0, H = 0, on = false, M = [];
+    const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      M = Array.from({ length: Math.round(Math.min(140, W / 9)) }, () => ({ x: Math.random(), y: Math.random(), r: .8 + Math.random() * 2, vx: (Math.random() - .5) * .00012, vy: -.00004 - Math.random() * .00012, p: Math.random() * 6.28, c: Math.random() < .18 ? (Math.random() < .5 ? '169,226,28' : '57,209,253') : '255,255,255' })); };
+    const tick = t => {
+      if (!on) return; ctx.clearRect(0, 0, W, H);
+      for (const m of M) {
+        m.x += m.vx + Math.sin(t / 2600 + m.p) * .00005; m.y += m.vy; if (m.y < -.02) { m.y = 1.02; m.x = Math.random(); }
+        // brighter inside the beam: a cone from the top centre
+        const px = m.x * W, py = m.y * H, half = .1 * W + py * .55, inBeam = Math.max(0, 1 - Math.abs(px - W / 2) / half);
+        const a = (.22 + .78 * inBeam) * (1 - m.y * .55) * (.55 + .45 * Math.sin(t / 700 + m.p * 3));
+        ctx.beginPath(); ctx.arc(px, py, m.r, 0, 6.283); ctx.fillStyle = `rgba(${m.c},${Math.max(0, a).toFixed(3)})`; ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(es => es.forEach(e => { on = e.isIntersecting; if (on) { size(); requestAnimationFrame(tick); } })).observe(q);
+    addEventListener('resize', () => on && size());
   })();
 
   /* ================= HERO: a waving hex sheet behind the copy + their products on real cars ================= */

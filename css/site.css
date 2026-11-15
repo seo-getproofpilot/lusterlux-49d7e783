@@ -1128,3 +1128,28 @@ section{scroll-margin-top:70px}
   .qopt-lvl em{white-space:normal;margin-left:4px}
   .qopt-lvl i{width:18px}
 }
+
+/* ===================== v11 ===================== */
+/* product names as printed on the bottles: Trajan-style capitals, every letter full height, lighter weight */
+.lbl,.big-name,.slide-name,.pm-info h3 .lbl{font-family:"Cinzel",serif;font-weight:500;text-transform:uppercase;letter-spacing:.03em}
+.big-name{font-size:clamp(50px,6.6vw,104px);letter-spacing:.02em}
+.big-name em{font-style:normal}
+
+/* quiz: wider, and the room around it moves */
+.quiz-card{max-width:1440px;grid-template-columns:300px minmax(0,1fr)}
+.quiz{padding-left:clamp(16px,3vw,48px);padding-right:clamp(16px,3vw,48px)}
+.quiz-opts{gap:20px}
+.qopt-prod{height:200px}
+.qopt-prod img{height:166px}
+.qopt-prod.n3 img{height:126px}.qopt-prod.n3 img:nth-child(2){height:158px}
+.ql-motes{position:absolute;inset:0;width:100%;height:100%}
+.ql-aura{position:absolute;border-radius:50%;filter:blur(90px);opacity:0;transition:opacity 1.6s ease .4s;will-change:transform}
+.quiz.is-lit .ql-aura{opacity:1}
+.ql-aura.a1{width:46vw;height:46vw;left:-14vw;top:18%;background:radial-gradient(closest-side,rgba(139,195,3,.30),transparent);animation:auraA 22s ease-in-out infinite alternate}
+.ql-aura.a2{width:42vw;height:42vw;right:-14vw;top:30%;background:radial-gradient(closest-side,rgba(57,209,253,.26),transparent);animation:auraB 26s ease-in-out infinite alternate}
+.ql-aura.a3{width:34vw;height:34vw;left:40%;bottom:-18vw;background:radial-gradient(closest-side,rgba(236,79,198,.18),transparent);animation:auraC 30s ease-in-out infinite alternate}
+@keyframes auraA{to{transform:translate(10vw,-8vh) scale(1.15)}}
+@keyframes auraB{to{transform:translate(-9vw,10vh) scale(.9)}}
+@keyframes auraC{to{transform:translate(-14vw,-6vh) scale(1.2)}}
+@media (prefers-reduced-motion:reduce){.ql-aura{animation:none}}
+@media (max-width:860px){.quiz-card{grid-template-columns:1fr}.qopt-prod,.quiz-opts.k-lv .qopt-prod{height:104px}.qopt-prod.n3 img{height:62px}.qopt-prod.n3 img:nth-child(2){height:78px}.qopt-prod img{height:84px}}
