@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LusterLux Detailing Products | Hoseless Wash, Ceramic Spray &amp; Dressings</title>
-<meta name="description" content="Detailing products made in Arizona by two 18-year-olds who got tired of streaks and greasy finishes. LuxPro hoseless wash, CeramicX, TireVenom, InteriorX and more.">
+<title>LusterLux Detailing Products | Waterless Wash, Ceramic Spray &amp; Dressings</title>
+<meta name="description" content="Detailing products built in Arizona by two 18-year-olds. Answer three questions and get a kit matched to your experience, your vehicle and how you wash.">
 <link rel="icon" href="img/brand/favicon.png">
+<link rel="preload" as="image" href="img/hero/foam-d.webp" media="(min-width:861px)">
+<link rel="preload" as="image" href="img/hero/foam-m.webp" media="(max-width:860px)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=11">
+<link rel="stylesheet" href="css/site.css?v=20">
 </head>
 <body>
 
@@ -20,9 +22,9 @@
     <span class="wordmark">LUSTER<b>LUX</b></span>
   </a>
   <nav class="nav-links" aria-label="Sections">
-    <a href="#dust">Hoseless</a>
-    <a href="#code">The lineup</a>
-    <a href="#routine">Build a routine</a>
+    <a href="#quiz">Find your kit</a>
+    <a href="#big">LuxPro &amp; CeramicX</a>
+    <a href="#shop">Shop the line</a>
     <a href="#guys">The guys</a>
   </nav>
   <button class="cart-btn" type="button" data-cart-open aria-label="Open cart">
@@ -33,82 +35,108 @@
 
 <main>
 
-<!-- ============ HERO: the real lineup, all eight bottles ============ -->
+<!-- ============ HERO: their own shoot, LuxFoam + the Huracán ============ -->
 <section class="hero" aria-label="LusterLux">
+  <div class="hero-media">
+    <picture>
+      <source media="(max-width:860px)" srcset="img/hero/foam-m.webp">
+      <img src="img/hero/foam-d.webp" alt="A bottle of LuxFoam held up in front of a blue Lamborghini Huracán in a driveway" width="1500" height="2250" fetchpriority="high">
+    </picture>
+  </div>
   <svg class="hero-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M8 -4 Q 66 50 8 104"/><path d="M92 -4 Q 34 50 92 104"/></svg>
   <div class="hero-copy">
-    <div class="hero-copy-a">
-      <p class="kicker"><span class="hatch" aria-hidden="true"></span>Detailing products · Made in Arizona</p>
-      <h1>Your current detailing products should be <span class="chrome">nervous.</span></h1>
-    </div>
-    <div class="hero-copy-b">
-      <p class="hero-sub">Hoseless washes, ceramic spray and dressings from two 18-year-olds who got tired of streaks, greasy finishes and bottles that didn't deliver. So they made their own.</p>
-      <div class="hero-ctas">
-        <a class="btn" href="#routine"><span>Build your kit</span></a>
-        <a class="btn btn-ghost" href="#dust"><span>Wipe the dust</span></a>
-      </div>
-    </div>
-  </div>
-  <div class="shelf" data-shelf>
-    <div class="shelf-row" data-shelf-row></div>
-    <div class="shelf-floor" aria-hidden="true"></div>
-    <div class="shelf-gloss" aria-hidden="true"></div>
-  </div>
-</section>
-
-<!-- ============ DUST TEST ============ -->
-<section class="dust" id="dust">
-  <div class="dust-copy">
-    <p class="kicker"><span class="hatch" aria-hidden="true"></span>LuxPro · hoseless wash</p>
-    <h2>Dust storm at four.<br>Car meet at seven.</h2>
-    <p>Water restrictions. An HOA that fines hoses. A black car that's beige by Wednesday. LuxPro lifts the dust with a spray and a wipe and leaves a slick layer that keeps it from settling back in.</p>
-    <p class="dust-joke">No hose. No bucket. No fine from Linda down the street.</p>
-    <div class="dust-result" data-dust-result>
-      <p><strong>That's the whole job.</strong> One 16 oz bottle handles 15 to 30 cars.</p>
-      <button class="btn" type="button" data-add="luxpro"><span>Add LuxPro · $19.99</span></button>
-    </div>
-  </div>
-  <div class="dust-stage">
-    <canvas data-dust-canvas aria-label="A dusty black McLaren. Drag across it to wipe the dust off." role="img"></canvas>
-    <img class="dust-src" src="img/p/luxpro-4.jpg" alt="" data-dust-img>
-    <div class="dust-hud">
-      <span class="dust-hint" data-dust-hint>Drag across the car to wipe it</span>
-      <span class="dust-meter"><i data-dust-bar></i></span>
-      <span class="dust-pct" data-dust-pct>0% clean</span>
+    <p class="kicker"><span class="hatch" aria-hidden="true"></span>Detailing products · Made in Arizona</p>
+    <h1>Your current detailing products should be <span class="chrome">nervous.</span></h1>
+    <p class="hero-sub">Built by two 18-year-olds who got sick of streaks and greasy finishes. Tell us what you drive and how you wash, and we'll hand you the kit.</p>
+    <div class="hero-ctas">
+      <a class="btn" href="#quiz"><span>Find my kit</span></a>
+      <a class="btn btn-ghost" href="#shop"><span>Shop the line</span></a>
     </div>
   </div>
 </section>
 
-<!-- ============ THE COLOR CODE ============ -->
-<section class="code" id="code">
-  <header class="code-head">
-    <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>The lineup</p>
-    <h2>Eight bottles. Eight colors.<br>One order to use them in.</h2>
-    <p>Every LusterLux bottle wears its job on the outside. Learn the colors and you'll grab the right one without reading a label: wash and wheels first, cabin last.</p>
+<!-- ============ QUIZ FUNNEL ============ -->
+<section class="quiz" id="quiz" aria-labelledby="quiz-h">
+  <div class="quiz-card" data-quiz>
+    <header class="quiz-top">
+      <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>Find your kit · 3 questions</p>
+      <ol class="quiz-steps" data-quiz-steps aria-label="Progress">
+        <li>Experience</li><li>Vehicle</li><li>Water</li><li>Your kit</li>
+      </ol>
+    </header>
+    <div class="quiz-body" data-quiz-body aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ============ THE BIG TWO: molecule showcase ============ -->
+<section class="big" id="big" aria-labelledby="big-h">
+  <header class="big-head">
+    <p class="kicker"><span class="hatch" aria-hidden="true"></span>Start with these two</p>
+    <h2 id="big-h">One cleans with no water.<br><span class="chrome">One protects for months.</span></h2>
   </header>
-
-  <div class="code-track" data-code>
-    <div class="code-stick">
-      <ol class="code-rail" data-code-rail aria-label="Jump to a bottle"></ol>
-      <div class="code-stage">
-        <div class="code-label" data-code-label></div>
-        <div class="code-bottle">
-          <svg class="xband" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M8 -4 Q 66 50 8 104" /><path d="M92 -4 Q 34 50 92 104" />
-          </svg>
-          <img data-code-img alt="">
-        </div>
-        <div class="code-side">
-          <figure class="code-photo"><img data-code-photo alt=""></figure>
-          <p class="code-fact" data-code-fact></p>
-          <div class="code-buy">
-            <span class="code-price" data-code-price></span>
-            <button class="btn btn-dark" type="button" data-code-add><span>Add to cart</span></button>
-          </div>
-        </div>
+  <div class="big-grid">
+    <div class="big-media">
+      <div class="big-card" data-big-card>
+        <div class="big-light" aria-hidden="true"></div>
+        <img class="big-img is-on" data-big-img="luxpro" src="img/cut/luxpro.webp" alt="LuxPro bottle">
+        <img class="big-img" data-big-img="ceramicx" src="img/cut/ceramicx.webp" alt="CeramicX bottle">
+        <canvas class="big-canvas" data-big-canvas aria-hidden="true"></canvas>
+        <span class="big-ix" data-big-ix>01 / 02</span>
       </div>
     </div>
+    <div class="big-info">
+      <article class="big-p" data-big="luxpro" style="--acc:#ff3ea5">
+        <p class="big-pre">Waterless wash + surface protectant</p>
+        <h3 class="big-name"><em>Lux</em>Pro</h3>
+        <p class="big-tag">No hose. No bucket. No pressure washer.</p>
+        <p class="big-desc">Spray a panel, wipe it with an Edgeless towel, flip to a dry side and buff. LuxPro wraps light dust, pollen and fingerprints so they lift off instead of dragging, then leaves a slick layer that keeps dust from settling back in.</p>
+        <p class="big-who"><b>New to detailing?</b> Start here. If you can wipe a counter, you can use LuxPro.</p>
+        <ul class="big-specs">
+          <li><svg viewBox="0 0 24 24"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/><path d="M4 4l16 16"/></svg>No water needed</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg>15–30 cars per bottle</li>
+          <li><svg viewBox="0 0 24 24"><path d="M4 16c3-2 5-2 8 0s5 2 8 0"/><path d="M4 11c3-2 5-2 8 0s5 2 8 0"/><path d="M12 3v3"/></svg>Leaves a dust-repelling layer</li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Safe on paint, PPF &amp; ceramic</li>
+        </ul>
+        <div class="big-buy">
+          <span class="big-price">$19.99</span>
+          <button class="btn" type="button" data-add="luxpro"><span>Add LuxPro</span></button>
+        </div>
+        <button class="big-alt" type="button" data-add="waterlesssys">Or get it with 3 Edgeless towels: Waterless Detail System · $25.99 <span aria-hidden="true">→</span></button>
+      </article>
+      <article class="big-p" data-big="ceramicx" style="--acc:#2aa8e8">
+        <p class="big-pre">Ceramic detail spray</p>
+        <h3 class="big-name">Ceramic<em>X</em></h3>
+        <p class="big-tag">Water beads. Gloss deepens. Up to 8 months.</p>
+        <p class="big-desc">After a wash, mist a panel, spread it with an Edgeless towel and buff it clear before you move on. CeramicX bonds a hydrophobic layer to paint, trim and chrome, so water runs off, dirt lets go easier and the next wash goes faster. Already ceramic coated? It tops the coating up.</p>
+        <p class="big-who"><b>Best once washing is routine.</b> Work in the shade, one panel at a time, and buff before it dries.</p>
+        <ul class="big-specs">
+          <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>Up to 8 months per coat</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg>10–20 cars per bottle</li>
+          <li><svg viewBox="0 0 24 24"><circle cx="7" cy="14" r="3"/><circle cx="16" cy="9" r="4"/><circle cx="17" cy="18" r="2"/></svg>Water beads and sheets off</li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Safe on PPF &amp; existing coatings</li>
+        </ul>
+        <div class="big-buy">
+          <span class="big-price">$27.99</span>
+          <button class="btn" type="button" data-add="ceramicx"><span>Add CeramicX</span></button>
+        </div>
+        <button class="big-alt" type="button" data-add="paintsys">Or the Paint Care System: LuxPro, LuxQuick, CeramicX + 3 towels · $72.99 <span aria-hidden="true">→</span></button>
+      </article>
+    </div>
   </div>
+</section>
+
+<!-- ============ THE SUPPLY: everything, sorted by job ============ -->
+<section class="shop" id="shop" aria-labelledby="shop-h">
+  <header class="shop-head">
+    <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>The full line</p>
+    <h2 id="shop-h">Every product, sorted by job.</h2>
+    <p>Each card tells you what it does and which step it belongs to. Anything marked <span class="easy-dot" aria-hidden="true"></span><b>Easy</b> is safe for your first wash.</p>
+  </header>
+  <div class="shop-bar" data-shop-bar>
+    <div class="shop-chips" role="tablist" aria-label="Filter by job" data-shop-chips></div>
+    <label class="shop-easy"><input type="checkbox" data-shop-easy><span>Easy only</span></label>
+  </div>
+  <div class="shop-aisles" data-shop-aisles></div>
 </section>
 
 <!-- ============ REAL PHOTOS ============ -->
@@ -116,7 +144,7 @@
   <header class="real-head">
     <p class="kicker"><span class="hatch" aria-hidden="true"></span>Out of the bottle</p>
     <h2>Phone in one hand.<br><span class="chrome">Bottle in the other.</span></h2>
-    <p>No studio, no props. Real foam, real brake dust, real cars.</p>
+    <p>Real foam, real brake dust, real cars.</p>
   </header>
   <div class="film" data-film>
     <div class="film-col" data-speed="-0.12">
@@ -139,24 +167,6 @@
       <figure><img src="img/p/lux-3.jpg" alt="Curved brush working a McLaren door sill" loading="lazy"><figcaption>Lux Brush</figcaption></figure>
       <figure><img src="img/p/luxfoam-4.jpg" alt="Foam sliding off a blue Huracán" loading="lazy"><figcaption>LuxFoam</figcaption></figure>
     </div>
-  </div>
-</section>
-
-<!-- ============ ROUTINE BUILDER ============ -->
-<section class="routine" id="routine">
-  <header class="routine-head">
-    <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>Build a routine</p>
-    <h2>What are you working with?</h2>
-  </header>
-  <div class="routine-tabs" role="tablist" data-routine-tabs></div>
-  <div class="routine-body">
-    <ul class="routine-list" data-routine-list></ul>
-    <aside class="routine-sum">
-      <p class="routine-blurb" data-routine-blurb></p>
-      <div class="routine-total"><span>Total</span><strong data-routine-total>$0.00</strong></div>
-      <button class="btn" type="button" data-routine-add><span>Add to cart</span></button>
-      <div class="routine-system" data-routine-system></div>
-    </aside>
   </div>
 </section>
 
@@ -213,8 +223,8 @@
   <img class="foot-badge" src="img/brand/badge.png" alt="LusterLux Detailing Products badge" width="220" height="220" loading="lazy">
   <p class="foot-word">LUSTER<b>LUX</b></p>
   <nav class="foot-links" aria-label="Footer">
-    <a href="#code">The lineup</a>
-    <a href="#routine">Build a routine</a>
+    <a href="#quiz">Find your kit</a>
+    <a href="#shop">Shop the line</a>
     <a href="https://lusterluxauto.com/collections/all" target="_blank" rel="noopener">Full store</a>
     <a href="https://www.instagram.com/lusterluxcarcare/" target="_blank" rel="noopener">Instagram</a>
     <a href="mailto:support@lusterluxauto.com">support@lusterluxauto.com</a>
@@ -235,6 +245,6 @@
 </aside>
 <div class="toast" data-toast role="status"></div>
 
-<script src="js/site.js?v=11"></script>
+<script src="js/site.js?v=20"></script>
 </body>
 </html>
