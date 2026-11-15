@@ -324,10 +324,31 @@
     if (goal === 'wash' && !E) notes.push('Own a pressure washer? The Foam Wash System (LuxCannon + 2 LuxFoam, $79.99) replaces the bucket step.');
     return [...new Set(it)];
   }
+  // the package: the best-value set of their real kits for this answer. It leads; the essentials are the fallback.
+  function pkgFor(a) {
+    const { lv, veh, goal } = a, B = lv === 'b', E = lv === 'e', ATV = veh === 'atv', UTV = veh === 'utv', BOAT = veh === 'boat';
+    const P = {
+      quick: ATV ? ['waterlesssys', 'restorx', 'xpad'] : B ? ['completesys'] : E ? ['paintsys', 'luxwindow', 'luxbug'] : ['paintsys'],
+      wash: ['ultimatesys', 'luxmit', 'luxbucket'],
+      shine: (UTV || ATV) ? ['paintsys', 'restorx', 'xpad'] : E ? ['paintsys', 'luxwindow'] : ['paintsys'],
+      wheels: ['rimtiresys'],
+      inside: BOAT ? (E ? ['interiorsys', 'luxbrush', 'luxwindow'] : ['interiorsys']) : B ? ['interiorsys'] : E ? ['completeinteriorsys', 'restorx', 'xpad', 'luxwindow'] : ['interiorsys', 'dualscent'],
+      glass: ['completesys', 'luxwindow'],
+      unsure: BOAT ? ['completesys'] : ATV ? ['waterlesssys', 'restorx', 'tirecaresys'] : UTV ? ['completesys', 'tirecaresys'] : E ? ['completesys', 'rimtiresys', 'ceramicx', 'luxquick'] : ['completesys', 'tirecaresys', 'luxquick'],
+    };
+    return P[goal] || null;
+  }
+  // what the package is worth if every piece were bought on its own
+  const worth = ks => ks.reduce((s, k) => s + (C[k].parts ? sum(C[k].parts) : C[k].price), 0);
   function picks(a) {
     const notes = [], loose = list(a.lv, a.veh, a.goal, notes);
     const allowed = new Set(['b', 'i', 'e'].flatMap(l => list(l, a.veh, a.goal, [])));
-    return Object.assign(bundle(loose, allowed), { notes });
+    const out = Object.assign(bundle(loose, allowed), { notes });
+    const pk = pkgFor(a);
+    if (pk && pk.slice().sort().join() !== out.items.slice().sort().join() && worth(pk) > sum(pk) && worth(pk) >= worth(out.items) - .01) {
+      out.pkg = { items: pk, price: sum(pk), worth: worth(pk), note: a.goal === 'wash' ? 'Needs a pressure washer. No pressure washer? The essentials work with a garden hose.' : '' };
+    }
+    return out;
   }
 
   (function quiz() {
@@ -431,8 +452,10 @@
   // the quiz lands here
   window.LLshowPicks = (a, p) => {
     const el = $('[data-picks]'); if (!el) return;
+    let sel = p.pkg ? 'pkg' : 'basic';
     const render = () => {
-      const total = sum(p.items);
+      const items = sel === 'pkg' ? p.pkg.items : p.items;
+      const total = sum(items);
       const head = a.lv === 'b' ? 'Short list. Nothing you can mess up.' : a.lv === 'i' ? 'What makes it look professionally done.' : 'The full routine. No shortcuts.';
       const swapNotes = p.swaps.map(s => {
         const extra = C[s.K].inc.filter(x => !s.cov.some(c => x.toLowerCase().includes(C[c].n.split(' ')[0].toLowerCase())));
@@ -443,15 +466,24 @@
       el.innerHTML = `<div class="picks-in">
         <div class="picks-head">
           <div><div class="kit-tags"><span>${LV[a.lv]}</span><span>${VEH[a.veh]}</span><span>${GOALS[a.goal][0]}</span></div>
-            <h3>Picked for you</h3><p>${head}</p>${swapNotes}${p.notes.map(n => `<p class="picks-note">${n}</p>`).join('')}</div>
-          <div class="picks-buy"><span>${p.items.length} item${p.items.length === 1 ? '' : 's'} as a package</span><strong>${money(total)}</strong>
-            <button class="btn" type="button" data-add="${p.items.join(',')}"><span>Add all to cart</span><i class="btn-ic" aria-hidden="true">${ARROW}</i></button>
-            <a class="picks-go" href="${permalink(Object.fromEntries(p.items.map(k => [k, 1])))}">Or check out now →</a>
+            <h3>Picked for you</h3><p>${head}</p>${sel === 'basic' ? swapNotes : ''}${p.notes.map(n => `<p class="picks-note">${n}</p>`).join('')}</div>
+          <div class="picks-buy"><span>${sel === 'pkg' ? 'Package deal' : `${items.length} item${items.length === 1 ? '' : 's'}`}</span><strong>${money(total)}</strong>
+            ${sel === 'pkg' ? `<em class="picks-worth">${money(p.pkg.worth)} of product if bought separately</em>` : ''}
+            <button class="btn" type="button" data-add="${items.join(',')}"><span>Add all to cart</span><i class="btn-ic" aria-hidden="true">${ARROW}</i></button>
+            <a class="picks-go" href="${permalink(Object.fromEntries(items.map(k => [k, 1])))}">Or check out now →</a>
             <button class="picks-redo" type="button" onclick="LLredoQuiz()">Change answers</button></div>
         </div>
-        ${up}
-        ${groupsHTML(p.items, true)}
+        ${p.pkg ? `<div class="picks-opts" role="radiogroup" aria-label="Choose a package or just the essentials">
+          <button type="button" role="radio" aria-checked="${sel === 'pkg'}" data-sel="pkg"><span class="po-badge">Best value</span><b>Package deal</b><strong>${money(p.pkg.price)}</strong>
+            <em>${money(p.pkg.worth - p.pkg.price)} less than buying it all separately · ${p.pkg.items.map(k => C[k].n).join(' + ')}</em>${p.pkg.note ? `<small>${p.pkg.note}</small>` : ''}</button>
+          <button type="button" role="radio" aria-checked="${sel === 'basic'}" data-sel="basic"><b>Just the essentials</b><strong>${money(sum(p.items))}</strong>
+            <em>${p.items.map(k => C[k].n).join(' + ')}</em></button></div>` : ''}
+        ${sel === 'basic' ? up : ''}
+        ${groupsHTML(items, true)}
+        ${sel === 'pkg' ? (() => { const inside = [...new Set(items.filter(k => C[k].kit).flatMap(k => C[k].parts))].filter(k => !items.includes(k));
+          return inside.length ? `<div class="pgroups picks-inside"><div class="pgroup" style="--n:${Math.min(4, inside.length)}"><h5>Inside the package</h5><div class="pgroup-grid">${inside.map(card).join('')}</div></div></div>` : ''; })() : ''}
         <p class="picks-rest">Tap any product for the full details. Everything else they make is below, sorted the same way.</p></div>`;
+      $$('[data-sel]', el).forEach(b => b.addEventListener('click', () => { sel = b.dataset.sel; render(); }));
       const u = $('[data-upgrade]', el);
       if (u) u.addEventListener('click', () => {
         p.items = p.items.filter(k => !p.up.inside.includes(k)); p.items.unshift(p.up.K);
