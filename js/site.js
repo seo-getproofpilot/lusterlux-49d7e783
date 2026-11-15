@@ -127,9 +127,9 @@
         ${pics.length > 1 ? `<div class="pm-thumbs">${pics.map((p, i) => `<button type="button" data-pm-pic="${p}" class="${i ? 'is-cut' : 'is-on'}" aria-label="${i ? 'Studio shot' : 'In use'}"><img src="${p}" alt=""></button>`).join('')}</div>` : ''}
       </div>
       <div class="pm-info">
-        <p class="pm-step">${it.kit ? 'System' : `Step ${it.step} · ${STEPS[it.step]}`}${it.easy ? '<span class="pm-easy">Easy for beginners</span>' : ''}</p>
+        ${it.kit ? '<p class="pm-step">System</p>' : ''}
         <h3 id="pm-h">${nameHTML(k)}</h3>
-        <p class="pm-px">${money(it.price)}${it.save ? `<span>${it.save}</span>` : ''}</p>
+        <p class="pm-px">${money(it.price)}${it.save ? `<span class="tag">${it.save}</span>` : ''}</p>
         <p class="pm-what">${it.what}</p>
         <div class="pm-buy">
           <div class="pm-qty"><button type="button" data-pmq="-1" aria-label="Fewer">−</button><span data-pm-qty>1</span><button type="button" data-pmq="1" aria-label="More">+</button></div>
@@ -292,13 +292,15 @@
        Boats get cockpit products only: LusterLux lists its boat cleaners as coming soon.
      - GOAL sets the aisle. Lists are loose products; bundle() then swaps in any system that's cheaper. */
   // vehicles: drawn silhouettes in the brand gradient (gradient defs live in index.html)
-  const ICON = {
+  const HL = { car: 'M24 35l20-3c8-7 18-11 32-12h24c9 0 16 3 23 9', utv: 'M22 33h108', atv: 'M24 35c7-6 22-6 28 0M104 35c7-6 22-6 28 0', boat: 'M8 32l146 3' };
+  const ICON0 = {
     car: '<svg viewBox="0 0 160 64"><path class="vb" d="M6 46c0-6 4-8 12-9l26-4c8-7 18-12 32-13h24c10 0 18 4 26 11l20 4c6 1 10 5 10 10v3H6z"/><path class="vw" d="M58 32c6-6 12-8 20-8h20c6 0 11 3 15 7z"/><path class="vc" d="M120 39h12"/><circle class="vt" cx="40" cy="48" r="10"/><circle class="vr" cx="40" cy="48" r="4.2"/><circle class="vt" cx="128" cy="48" r="10"/><circle class="vr" cx="128" cy="48" r="4.2"/></svg>',
     utv: '<svg viewBox="0 0 160 64"><path class="vc" d="M50 32l8-22h54l12 22M84 10v22M58 10l-8 22"/><path class="vb" d="M12 46l8-14h112l14 6 2 8z"/><path class="vw" d="M64 32l4-8h24l-2 8z"/><circle class="vt" cx="36" cy="48" r="13"/><circle class="vr" cx="36" cy="48" r="5.5"/><circle class="vt" cx="124" cy="48" r="13"/><circle class="vr" cx="124" cy="48" r="5.5"/></svg>',
     atv: '<svg viewBox="0 0 160 64"><path class="vc" d="M104 28l6-14h12"/><path class="vb" d="M20 36c6-9 26-9 34 0h46c6-9 26-9 34 0l-6 8H26z"/><path class="vw" d="M58 28h34l-4 7H60z"/><circle class="vt" cx="38" cy="48" r="13"/><circle class="vr" cx="38" cy="48" r="5.5"/><circle class="vt" cx="118" cy="48" r="13"/><circle class="vr" cx="118" cy="48" r="5.5"/></svg>',
     boat: '<svg viewBox="0 0 160 64"><path class="vw" d="M48 33l10-16h40l14 16z"/><path class="vc" d="M60 17l-4-6h44M80 17V9"/><path class="vb" d="M4 31l152 4-18 17H22z"/><path class="vc" d="M4 60c9-4 16-4 25 0s16 4 25 0 16-4 25 0 16 4 25 0 16-4 25 0 16 4 25 0"/></svg>',
   };
   // experience tiles show the product each level usually starts with
+  const ICON = Object.fromEntries(Object.entries(ICON0).map(([k, s]) => [k, s.replace('<svg viewBox="0 0 160 64">', `<svg viewBox="0 0 160 64"><ellipse class="vs" cx="80" cy="${k === 'boat' ? 56 : 60}" rx="70" ry="3.5"/>`).replace('</svg>', `<path class="vh" d="${HL[k]}"/></svg>`)]));
   // experience tiles: the setup grows with the level, so the picture shows how much gear each one means
   const EXP = {
     b: [['luxpro'], 'One spray', 1],
@@ -315,9 +317,10 @@
     wheels: ['Wheels & tires', 'Brake dust off, tires black.', 'img/real/wheelassassin.webp'],
     inside: ['The inside', 'Dash, seats, trim, smell.', 'img/real/interiorx.webp'],
     glass: ['Glass & chrome', 'Windshield, console, chrome.', 'img/real/luxwindow.webp'],
+    outside: ['The outside', 'Hull, deck and rails. Wash and shine.', 'img/real/luxmit.webp'],
     unsure: ['Not sure. Start me off', 'We pick the basics for your level.', 'img/real/edgeless.webp'],
   };
-  const goalsFor = v => v === 'boat' ? ['inside', 'glass', 'unsure'] : v === 'atv' ? ['quick', 'wash', 'shine', 'wheels', 'unsure'] : ['quick', 'wash', 'shine', 'wheels', 'inside', 'unsure'];
+  const goalsFor = v => v === 'boat' ? ['outside', 'inside', 'glass', 'unsure'] : v === 'atv' ? ['quick', 'wash', 'shine', 'wheels', 'unsure'] : ['quick', 'wash', 'shine', 'wheels', 'inside', 'unsure'];
   const QS = [
     { key: 'lv', h: 'How much detailing have you done?', opts: () => [
       ['b', 'Beginner', 'Never detailed it myself. I want easy.'],
@@ -337,13 +340,17 @@
       wheels: B ? ['wheelassassin', 'tirevenom', 'xpad'] : E ? ['wheelassassin', 'wheelbrush', 'tirebrush', 'tirevenom', 'xpad'] : ['wheelassassin', 'wheelbrush', 'tirevenom', 'xpad'],
       inside: B ? ['interiorx', 'microlux'] : E ? ['interiorx', 'restorx', 'microlux', 'xpad', 'luxbrush', 'luxwindow', 'newcarember', 'vanillaember'] : ['interiorx', 'restorx', 'microlux', 'xpad', 'newcarember'],
       glass:  B ? ['luxpro', 'luxwindow'] : ['luxpro', 'edgeless', 'luxwindow'],
+      outside: B ? ['luxfoam', 'luxmit', 'luxbucket', 'luxdry'] : E ? ['luxfoam', 'luxmit', 'luxbucket', 'luxdry', 'luxpro', 'edgeless', 'luxquick', 'ceramicx'] : ['luxfoam', 'luxmit', 'luxbucket', 'luxdry', 'luxpro', 'edgeless'],
       unsure: B ? ['luxpro', 'interiorx', 'tirevenom'] : E ? ['luxpro', 'restorx', 'interiorx', 'edgeless', 'microlux', 'xpad', 'tirevenom', 'luxquick', 'ceramicx', 'wheelassassin', 'wheelbrush'] : ['luxpro', 'restorx', 'interiorx', 'edgeless', 'microlux', 'xpad', 'tirevenom', 'luxquick'],
     };
     let it = T[goal].slice();
     if (veh === 'boat') {
-      if (goal === 'unsure') it = B ? ['interiorx', 'restorx', 'microlux', 'xpad'] : ['interiorx', 'restorx', 'microlux', 'xpad', 'luxpro', 'edgeless'];
+      // not sure: inside and out, so the first order covers the whole boat
+      if (goal === 'unsure') it = B ? ['luxpro', 'edgeless', 'interiorx', 'microlux'] : ['luxpro', 'edgeless', 'interiorx', 'restorx', 'microlux', 'xpad'].concat(E ? ['luxfoam', 'luxmit', 'luxbucket', 'luxdry'] : []);
       if (goal === 'inside') it = it.filter(k => !['newcarember', 'vanillaember'].includes(k));
-      notes.push('LusterLux lists a boat exterior cleaner and a boat interior cleaner as coming soon. Until then, this covers the cockpit.');
+      notes.push(goal === 'outside' ? 'LusterLux lists a boat exterior cleaner as coming soon. Until then, LuxFoam handles the wash and LuxPro the wipe-downs between trips.'
+        : goal === 'unsure' ? 'LusterLux lists boat-specific cleaners as coming soon. Until then, this covers the deck wipe-down and the cockpit.'
+        : 'LusterLux lists a boat interior cleaner as coming soon. Until then, this covers the cockpit.');
     }
     if (OFF) {
       if (goal === 'unsure') it = B ? ['luxpro', 'edgeless', 'restorx', 'xpad'] : ['luxfoam', 'luxmit', 'luxbucket', 'wheelassassin', 'restorx', 'xpad'].concat(E ? ['foamx', 'ceramicx'] : []);
@@ -365,6 +372,7 @@
       wheels: ['rimtiresys'],
       inside: BOAT ? (E ? ['interiorsys', 'luxbrush', 'luxwindow'] : ['interiorsys']) : B ? ['interiorsys'] : E ? ['completeinteriorsys', 'restorx', 'xpad', 'luxwindow'] : ['interiorsys', 'dualscent'],
       glass: ['completesys', 'luxwindow'],
+      outside: E ? ['paintsys', 'luxfoam', 'luxmit', 'luxbucket', 'luxdry'] : ['waterlesssys', 'luxfoam', 'luxmit', 'luxbucket', 'luxdry'],
       unsure: BOAT ? ['completesys'] : ATV ? ['waterlesssys', 'restorx', 'tirecaresys'] : UTV ? ['completesys', 'tirecaresys'] : E ? ['completesys', 'rimtiresys', 'ceramicx', 'luxquick'] : ['completesys', 'tirecaresys', 'luxquick'],
     };
     return P[goal] || null;
@@ -382,6 +390,7 @@
     return out;
   }
 
+  window.LLpicks = picks;   // used by the quiz test sweep
   (function quiz() {
     const body = $('[data-quiz-body]'), track = $('[data-quiz-track]');
     if (!body) return;
@@ -448,11 +457,11 @@
     interiorx: 'interiorchem', restorx: 'interiorchem', newcarember: 'scent', vanillaember: 'scent', luxbrush: 'intool',
   };
   const typeOf = k => C[k].kit ? 'kit' : TYPEOF[k];
-  const card = k => { const it = C[k]; return `<article class="pcard" data-easy="${it.easy ? 1 : 0}" data-k="${k}">
+  const card = k => { const it = C[k]; return `<article class="pcard" data-k="${k}">
         <button type="button" class="pcard-img${isPhoto(k) ? ' is-photo' : ''}" data-open="${k}" aria-label="Details for ${it.n}"><img src="${img(k)}" alt="" loading="lazy">
-          ${it.kit ? '' : `<span class="pcard-step">Step ${it.step} · ${STEPS[it.step]}</span>`}${it.easy ? '<span class="pcard-easy">Easy</span>' : ''}<span class="pcard-more">View details</span></button>
-        <div class="pcard-body"><button type="button" class="pcard-name" data-open="${k}">${nameHTML(k)}</button>${SPEC[k] ? `<span class="pcard-spec">${SPEC[k]}</span>` : ''}<p>${it.what}</p>${it.save ? `<span class="pcard-save">${it.save}</span>` : ''}</div>
-        <div class="pcard-foot"><span class="pcard-px">${money(it.price)}</span><button class="pcard-add" type="button" data-add="${k}"><span>Add</span></button></div>
+          <span class="pcard-more">View details</span></button>
+        <div class="pcard-body"><button type="button" class="pcard-name" data-open="${k}">${nameHTML(k)}</button>${SPEC[k] ? `<span class="pcard-spec">${SPEC[k]}</span>` : ''}<p>${it.what}</p>${it.save ? `<span class="tag">${it.save}</span>` : ''}</div>
+        <div class="pcard-foot"><span class="pcard-px">${money(it.price)}</span><button class="pcard-add" type="button" data-add="${k}"><i class="add-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2.2l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.1L20.5 8H6.4"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg></i><span>Add to cart</span></button></div>
       </article>`; };
   // sets they don't sell as one SKU: added together, at the real combined price (no invented discount)
   const SETS = {
@@ -465,8 +474,8 @@
     protect: [['kit', 'paintsys'], ['set', 'ceramic']], intool: [['kit', 'completeinteriorsys'], ['kit', 'interiorsys'], ['kit', 'dualscent']],
   };
   const fillTile = f => {
-    if (f[0] === 'kit') { const it = C[f[1]]; return `<div class="ftile carbon is-kit"><span class="ftile-badge">${it.save.startsWith('Saves') ? it.save : 'Bundle'}</span><button type="button" class="ftile-img" data-open="${f[1]}" aria-label="Details for ${it.n}"><img src="${img(f[1])}" alt="" loading="lazy"></button><span class="ftile-k">Get these as a set</span><b><button type="button" class="ftile-name" data-open="${f[1]}">${it.n}</button></b><span>${it.what}</span><div class="ftile-foot"><strong>${money(it.price)}</strong><button type="button" class="pcard-add" data-add="${f[1]}"><span>Add</span></button></div></div>`; }
-    if (f[0] === 'set') { const s = SETS[f[1]], tot = sum(s.items); return `<div class="ftile carbon is-kit is-set"><span class="ftile-badge">Buy together</span><div class="ftile-mini">${s.items.map(k => `<button type="button" data-open="${k}" aria-label="${C[k].n}"><img src="${img(k)}" alt="" loading="lazy"></button>`).join('')}</div><span class="ftile-k">${s.items.length} items, one click</span><b>${s.n}</b><span>${s.p}</span><div class="ftile-foot"><strong>${money(tot)}</strong><button type="button" class="pcard-add" data-add="${s.items.join(',')}"><span>Add all</span></button></div></div>`; }
+    if (f[0] === 'kit') { const it = C[f[1]]; return `<div class="ftile carbon is-kit"><span class="ftile-badge tag">${it.save.startsWith('Saves') ? it.save : 'Bundle'}</span><button type="button" class="ftile-img" data-open="${f[1]}" aria-label="Details for ${it.n}"><img src="${img(f[1])}" alt="" loading="lazy"></button><span class="ftile-k">Get these as a set</span><b><button type="button" class="ftile-name" data-open="${f[1]}">${it.n}</button></b><span>${it.what}</span><div class="ftile-foot"><strong>${money(it.price)}</strong><button type="button" class="pcard-add" data-add="${f[1]}"><i class="add-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2.2l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.1L20.5 8H6.4"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg></i><span>Add to cart</span></button></div></div>`; }
+    if (f[0] === 'set') { const s = SETS[f[1]], tot = sum(s.items); return `<div class="ftile carbon is-kit is-set"><span class="ftile-badge tag">Buy together</span><div class="ftile-mini">${s.items.map(k => `<button type="button" data-open="${k}" aria-label="${C[k].n}"><img src="${img(k)}" alt="" loading="lazy"></button>`).join('')}</div><span class="ftile-k">${s.items.length} items, one click</span><b>${s.n}</b><span>${s.p}</span><div class="ftile-foot"><strong>${money(tot)}</strong><button type="button" class="pcard-add" data-add="${s.items.join(',')}"><i class="add-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2.2l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.1L20.5 8H6.4"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg></i><span>Add all to cart</span></button></div></div>`; }
     return '';
   };
   const groupsHTML = (keys, kitsFirst, fill) => {
@@ -534,7 +543,7 @@
       { cat: 'interior', h: 'Interior & Trim', p: 'Cabin surfaces, faded plastic and the smell.', types: ['interiorchem', 'scent', 'intool'] },
       { cat: 'kits', h: 'Kits & Systems', p: 'Bundles that cost less than the same items bought apart. Every saving shown is the real math.', types: ['kit'] },
     ];
-    const wrap = $('[data-shop-aisles]'), chips = $('[data-shop-chips]'), easy = $('[data-shop-easy]');
+    const wrap = $('[data-shop-aisles]'), chips = $('[data-shop-chips]');
     if (!wrap) return;
     const keysOf = types => Object.keys(C).filter(k => types.includes(typeOf(k)));
     chips.innerHTML = [['all', 'All'], ...AISLES.map(a => [a.cat, a.h])].map(([c, l], i) => `<button type="button" role="tab" data-cat="${c}" aria-selected="${i === 0}"><span>${l}</span></button>`).join('');
@@ -545,7 +554,7 @@
         let any = false;
         $$('.pgroup', a).forEach(g => {
           let gAny = false;
-          $$('.pcard', g).forEach(c => { const s = !easy.checked || c.dataset.easy === '1'; c.hidden = !s; gAny = gAny || s; });
+          gAny = $$('.pcard', g).length > 0;
           g.hidden = !gAny; g.style.setProperty('--n', Math.min(4, $$('.pcard:not([hidden]), .ftile', g).length || 1)); any = any || gAny;
         });
         a.hidden = !((cat === 'all' || a.dataset.aisle === cat) && any);
@@ -557,7 +566,6 @@
       const top = $('[data-shop-bar]').getBoundingClientRect().top + scrollY - 80;
       if (scrollY > top) scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
     });
-    easy.addEventListener('change', filter);
   })();
 
   /* ================= BIG TWO: bottle -> ball-and-stick molecule -> bottle ================= */
