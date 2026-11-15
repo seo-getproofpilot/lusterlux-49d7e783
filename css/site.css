@@ -992,3 +992,139 @@ section{scroll-margin-top:70px}
 .picks-inside .pcard{opacity:.96}
 .carbon,.aisle-bar,.picks-in,.ftile.carbon,.ftile.is-quiz{background-image:radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.12),rgba(255,255,255,0) 55%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon.png")!important;background-size:100% 100%,100% 100%,88px 88px!important}
 .ftile.is-quiz{background-image:radial-gradient(60% 90% at 100% 50%,rgba(139,195,3,.28),transparent 70%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon.png")!important}
+
+/* ===================== v10: soft, classy, inviting =====================
+   Pill buttons (no skew): the primary has a neon light orbiting its edge, the light one is chrome with a shimmer.
+   Quiz sits under a spotlight. No lime outlines anywhere; selection is shown with light and a check, not a border. */
+:root{--skew:0deg}
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes orbit{to{--ang:360deg}}
+.btn{border-radius:999px;transform:none;gap:16px;min-height:58px;padding:0 8px 0 30px;border:1.5px solid transparent;color:#fff;letter-spacing:.14em;font-weight:800;
+  background:linear-gradient(180deg,#1a1d17,#0c0d0b) padding-box,
+    conic-gradient(from var(--ang),rgba(139,195,3,0) 0 55%,rgba(139,195,3,.9) 72%,#efffc2 80%,#39d1fd 88%,rgba(57,209,253,0) 96%) border-box,
+    linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.16)) border-box;
+  box-shadow:0 14px 34px -16px rgba(0,0,0,.8),0 0 26px -10px rgba(139,195,3,.55);animation:orbit 3.4s linear infinite}
+.btn>span{transform:none}
+.btn-ic{width:42px;height:42px;border-radius:50%;background:var(--lime);color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-ic svg{transform:none}
+.btn:hover{transform:translateY(-2px);background:linear-gradient(180deg,#22261d,#10120e) padding-box,
+    conic-gradient(from var(--ang),rgba(139,195,3,0) 0 45%,rgba(139,195,3,1) 68%,#f4ffd6 78%,#39d1fd 88%,rgba(57,209,253,0) 98%) border-box,
+    linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,.22)) border-box;
+  box-shadow:0 18px 38px -16px rgba(0,0,0,.85),0 0 34px -8px rgba(139,195,3,.7);animation-duration:2.2s}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--aqua);outline-offset:4px}
+.btn:not(:has(.btn-ic)){padding-right:30px}
+/* chrome: polished silver with a light sweeping across */
+.btn-light,.btn-ghost{color:#0a0a0b;border:0;animation:none;overflow:hidden;
+  background:linear-gradient(180deg,#ffffff 0%,#e9eaec 22%,#a9adb3 50%,#d9dbde 64%,#ffffff 100%);
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.25),0 14px 30px -14px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.25)}
+.btn-light::before,.btn-ghost::before{content:"";position:absolute;top:-20%;bottom:-20%;left:-40%;width:34%;z-index:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.95) 50%,transparent);transform:skewX(-20deg);animation:shimmer 3.8s ease-in-out infinite}
+@keyframes shimmer{0%,55%{left:-40%}85%,100%{left:120%}}
+.btn-light:hover,.btn-ghost:hover{background:linear-gradient(180deg,#fff 0%,#f2f3f4 22%,#b8bcc1 50%,#e4e6e8 64%,#fff 100%);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.25),0 18px 34px -14px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.4)}
+.btn-light:hover::before{animation-duration:1.6s}
+.btn-light .btn-ic,.btn-ghost .btn-ic{background:#0a0a0b;color:#fff}
+.btn-dark{color:#fff}
+.btn-sm{min-height:46px;padding:0 6px 0 20px}
+@media (prefers-reduced-motion:reduce){.btn,.btn-light::before{animation:none}}
+@media (max-width:860px){.hero-ctas .btn{min-height:50px;padding:0 6px 0 20px}.hero-ctas .btn-ic{width:36px;height:36px}}
+
+/* ---------- quiz: a spotlight instead of the hex sheet ---------- */
+.quiz-hex{display:none}
+.quiz{background:radial-gradient(70% 40% at 50% 0%,#17181a,transparent 70%),#08090a;padding-top:clamp(110px,12vw,170px)}
+.quiz-light{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.ql-lamp{position:absolute;left:50%;top:-14px;width:min(360px,60vw);height:28px;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(closest-side,#fff,rgba(255,255,255,.6) 40%,transparent);filter:blur(2px);opacity:0;transition:opacity .25s}
+.ql-beam{position:absolute;left:50%;top:0;width:min(1500px,150vw);height:min(1100px,100%);transform:translateX(-50%);
+  clip-path:polygon(41% 0,59% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.07) 45%,rgba(255,255,255,0) 85%);
+  -webkit-mask-image:radial-gradient(70% 100% at 50% 0%,#000 30%,transparent 80%);mask-image:radial-gradient(70% 100% at 50% 0%,#000 30%,transparent 80%);
+  filter:blur(18px);opacity:0;transition:opacity 1.2s ease .15s}
+.ql-pool{position:absolute;left:50%;top:clamp(90px,10vw,150px);width:min(1300px,120vw);height:420px;transform:translateX(-50%);
+  background:radial-gradient(50% 40% at 50% 40%,rgba(255,255,255,.12),transparent 70%);opacity:0;transition:opacity 1.4s ease .35s}
+.quiz.is-lit .ql-lamp{opacity:1;animation:flick .9s steps(1) 1}
+.quiz.is-lit .ql-beam,.quiz.is-lit .ql-pool{opacity:1}
+@keyframes flick{0%{opacity:0}12%{opacity:1}20%{opacity:.2}30%{opacity:1}38%{opacity:.4}46%,100%{opacity:1}}
+.quiz-card{border-radius:30px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 -30px 80px -40px rgba(255,255,255,.25),0 60px 120px -40px rgba(0,0,0,.95)}
+.quiz-card::before{display:none}
+.quiz-card.carbon .quiz-main{background:radial-gradient(80% 60% at 50% 0%,rgba(255,255,255,.07),transparent 70%),linear-gradient(180deg,rgba(10,10,11,.7),rgba(10,10,11,.88))}
+.quiz-side{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(10,10,11,.55) 60%);border-right:1px solid rgba(255,255,255,.06)}
+.quiz-badge{box-shadow:0 16px 40px -12px rgba(0,0,0,.9)}
+.quiz-track li{border-radius:16px;box-shadow:none}
+.quiz-track li.is-on{background:rgba(255,255,255,.1);box-shadow:none}
+.is-done .qt-n{background:var(--lime);color:var(--ink);box-shadow:none}
+.qopt{border-radius:22px;box-shadow:none;background:linear-gradient(170deg,rgba(255,255,255,.075),rgba(255,255,255,.025))}
+.qopt::before{background:radial-gradient(110% 80% at 50% 0%,rgba(255,255,255,.12),transparent 60%)}
+.qopt:hover{box-shadow:0 24px 44px -22px rgba(0,0,0,.9);background:linear-gradient(170deg,rgba(255,255,255,.11),rgba(255,255,255,.04))}
+.qopt.is-picked{box-shadow:0 24px 44px -22px rgba(0,0,0,.9);background:linear-gradient(170deg,rgba(255,255,255,.14),rgba(255,255,255,.05))}
+.qopt.is-picked::after{content:"✓";position:absolute;right:16px;top:16px;z-index:3;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--ink);font-weight:900;font-size:15px}
+.qopt-ic{background:rgba(255,255,255,.07)}
+.qopt:hover .qopt-ic{background:rgba(255,255,255,.12)}
+/* experience: the gear grows with the level */
+.qopt-prod{height:178px;border-radius:18px;background:radial-gradient(55% 40% at 50% 96%,rgba(255,255,255,.16),transparent 70%),radial-gradient(80% 70% at 50% 30%,#1d1e21,#0b0b0d);display:flex;justify-content:center;align-items:flex-end;padding-bottom:14px}
+.qopt-prod img{height:146px;margin:0;max-width:none;filter:drop-shadow(0 10px 12px rgba(0,0,0,.6))}
+.qopt-prod.n3 img{height:112px;margin:0 -10px}
+.qopt-prod.n3 img:nth-child(2){height:140px;z-index:2}
+.qopt-prod.n4 img{height:96px;margin:0 -12px}
+.qopt-prod.n4 img:nth-child(2){height:128px;z-index:2}
+.qopt-prod.n4 img:nth-child(3){height:118px;z-index:3}
+.qopt:hover .qopt-prod img{transform:translateY(-5px)}
+.qopt:hover .qopt-prod img:nth-child(2){transition-delay:.04s}
+.qopt:hover .qopt-prod img:nth-child(3){transition-delay:.08s}
+.qopt-tag{display:none}
+.qopt-lvl{position:relative;display:flex;align-items:center;gap:5px;margin-top:12px}
+.qopt-lvl i{width:22px;height:6px;border-radius:6px;background:rgba(255,255,255,.14)}
+.qopt-lvl i.on{background:linear-gradient(90deg,var(--lime),#c8f25a)}
+.qopt-lvl em{margin-left:8px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#cfcfcc}
+@media (max-width:860px){
+  .qopt-prod,.quiz-opts.k-lv .qopt-prod{height:104px;padding-bottom:8px}
+  .qopt-prod img,.quiz-opts.k-lv .qopt-prod img{height:84px}
+  .qopt-prod.n3 img{height:62px;margin:0 -7px}.qopt-prod.n3 img:nth-child(2){height:78px}
+  .qopt-prod.n4 img{height:52px;margin:0 -8px}.qopt-prod.n4 img:nth-child(2){height:70px}.qopt-prod.n4 img:nth-child(3){height:64px}
+  .quiz-opts.k-lv .qopt{grid-template-columns:130px 1fr}
+  .qopt-lvl em{font-size:10.5px}
+}
+
+/* ---------- showcase features: rendered 3D icons, no outlines ---------- */
+.big-feats li{grid-template-columns:78px minmax(0,1fr);padding:12px 18px 12px 10px;border-radius:20px;box-shadow:none;background:linear-gradient(100deg,rgba(255,255,255,.06),rgba(255,255,255,.015))}
+.bf-ic{width:78px;height:78px;border-radius:0;background:none!important;box-shadow:none!important}
+.bf-ic img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.55))}
+.big-stats div,.big-stats div+div{box-shadow:none;border-radius:18px;background:rgba(255,255,255,.045)}
+.big-how{box-shadow:none;border-radius:18px;background:rgba(255,255,255,.045)}
+.big-how b{border-radius:999px;padding:6px 12px}
+@media (max-width:860px){.big-feats li{grid-template-columns:60px minmax(0,1fr)}.bf-ic{width:60px;height:60px}}
+
+/* ---------- no lime outlines; softer corners everywhere ---------- */
+.picks-opts button[aria-checked="true"]{box-shadow:0 18px 40px -20px rgba(0,0,0,.8);background:rgba(255,255,255,.12)}
+.picks-opts button{border-radius:20px}
+.picks-deal{box-shadow:none;border-radius:14px}
+.picks-note,.kit-note{border-left:0;padding-left:0}
+.pm-thumbs button.is-on{box-shadow:0 0 0 2px #fff}
+.big-alt{border-radius:16px}
+.pcard{border-radius:22px;overflow:hidden}
+.ftile{border-radius:22px}
+.aisle-bar{border-radius:18px}
+.shop-bar{border-radius:0 0 20px 20px}
+.picks-in{border-radius:28px}
+.rv-slide{border-radius:22px}
+.toast{border-radius:999px}
+.cart-btn{border-radius:50%}
+/* softer beam: two layers of haze, no hard edge */
+.ql-beam{clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);filter:blur(42px);background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.05) 40%,rgba(255,255,255,0) 80%)}
+.ql-beam::after{content:"";position:absolute;inset:0;clip-path:polygon(45% 0,55% 0,72% 100%,28% 100%);background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 70%)}
+.qopt-lvl em{white-space:nowrap}
+.ql-beam{filter:blur(34px);background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.09) 40%,rgba(255,255,255,0) 82%)}
+.ql-beam::after{background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.04) 65%,rgba(255,255,255,0))}
+.ql-pool{background:radial-gradient(48% 38% at 50% 38%,rgba(255,255,255,.16),transparent 70%)}
+/* clip the shape on inner layers, blur the wrapper, so the edges actually soften */
+.ql-beam{clip-path:none!important;background:none!important;-webkit-mask-image:none;mask-image:none;filter:blur(30px)}
+.ql-beam::before,.ql-beam::after{content:"";position:absolute;inset:0}
+.ql-beam::before{clip-path:polygon(40% 0,60% 0,96% 100%,4% 100%);background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.07) 40%,rgba(255,255,255,0) 80%)}
+.ql-beam::after{clip-path:polygon(46% 0,54% 0,70% 100%,30% 100%);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.03) 60%,rgba(255,255,255,0))}
+@media (max-width:860px){
+  .quiz-opts.k-lv .qopt{grid-template-columns:112px minmax(0,1fr)!important}
+  .quiz-opts.k-lv .qopt>*{min-width:0}
+  .qopt-lvl{flex-wrap:wrap;row-gap:6px}
+  .qopt-lvl em{white-space:normal;margin-left:4px}
+  .qopt-lvl i{width:18px}
+}

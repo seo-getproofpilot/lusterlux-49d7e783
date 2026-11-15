@@ -169,6 +169,13 @@
   addEventListener('scroll', onNav, { passive: true }); onNav();
   $$('.btn[data-arrow]').forEach(b => b.insertAdjacentHTML('beforeend', `<i class="btn-ic" aria-hidden="true">${ARROW}</i>`));
 
+  (function spot() {
+    const q = $('.quiz'); if (!q) return;
+    if (!('IntersectionObserver' in window)) return q.classList.add('is-lit');
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { q.classList.add('is-lit'); io.disconnect(); } }), { threshold: .25 });
+    io.observe(q);
+  })();
+
   /* ================= HERO: a waving hex sheet behind the copy + their products on real cars ================= */
   (function hero() {
     $$('[data-hex]').forEach(cv => {
@@ -274,7 +281,13 @@
     boat: '<svg viewBox="0 0 160 64"><path class="vw" d="M48 33l10-16h40l14 16z"/><path class="vc" d="M60 17l-4-6h44M80 17V9"/><path class="vb" d="M4 31l152 4-18 17H22z"/><path class="vc" d="M4 60c9-4 16-4 25 0s16 4 25 0 16-4 25 0 16 4 25 0 16-4 25 0 16 4 25 0"/></svg>',
   };
   // experience tiles show the product each level usually starts with
-  const EXP = { b: ['img/cut/sm/luxpro.webp', 'Starts with LuxPro'], i: ['img/cut/sm/acc-foamx.webp', 'Steps up to the FoamX'], e: ['img/cut/sm/acc-luxcannon.webp', 'Runs the LuxCannon'] };
+  // experience tiles: the setup grows with the level, so the picture shows how much gear each one means
+  const EXP = {
+    b: [['luxpro'], 'One spray', 1],
+    i: [['acc-luxbucket', 'luxfoam', 'acc-luxmit'], 'Bucket wash', 2],
+    e: [['ceramicx', 'acc-luxcannon', 'wheelassassin'], 'Cannon + coatings', 3],
+  };
+  const expPic = v => `<span class="qopt-prod n${EXP[v][0].length}">${EXP[v][0].map((f, i) => `<img src="img/cut/sm/${f}.webp" alt="" loading="lazy" style="--i:${i}">`).join('')}</span>`;
   const LV = { b: 'Beginner', i: 'Intermediate', e: 'Expert' }, VEH = { car: 'Car / Truck', utv: 'UTV', atv: 'ATV', boat: 'Boat' };
   // each goal tile shows the real product shot for that job
   const GOALS = {
@@ -368,9 +381,9 @@
       body.innerHTML = `<div class="quiz-q"><p class="quiz-n">Question ${at + 1} of 3</p><h2 id="quiz-h">${q.h}</h2>
         <div class="quiz-opts n${opts.length} k-${kind}">${opts.map(([v, b, s, pic], i) => `<button type="button" class="qopt${ans[q.key] === v ? ' is-picked' : ''}" data-v="${v}" style="--d:${i * 60}ms">
           ${kind === 'goal' ? `<span class="qopt-bg"><img src="${pic}" alt="" loading="lazy"></span><span class="qopt-sp"></span>`
-            : kind === 'lv' ? `<span class="qopt-prod"><img src="${EXP[v][0]}" alt="" loading="lazy"></span>`
+            : kind === 'lv' ? expPic(v)
             : `<span class="qopt-veh">${ICON[v]}</span>`}
-          <b>${b}</b><span class="qopt-s">${s}</span>${kind === 'lv' ? `<span class="qopt-tag">${EXP[v][1]}</span>` : ''}<i class="qopt-go" aria-hidden="true">${ARROW}</i></button>`).join('')}</div>
+          <b>${b}</b><span class="qopt-s">${s}</span>${kind === 'lv' ? `<span class="qopt-lvl" aria-hidden="true">${[1, 2, 3].map(n => `<i class="${n <= EXP[v][2] ? 'on' : ''}"></i>`).join('')}<em>${EXP[v][1]}</em></span>` : ''}<i class="qopt-go" aria-hidden="true">${ARROW}</i></button>`).join('')}</div>
         ${at ? '<button type="button" class="quiz-back" data-back>← Back</button>' : ''}</div>`;
     }
     function finish() {
