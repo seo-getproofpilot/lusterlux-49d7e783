@@ -1368,3 +1368,30 @@ section{scroll-margin-top:70px}
 .qopt:hover{background:linear-gradient(170deg,rgba(34,35,38,.88),rgba(18,19,21,.92))}
 .qopt.is-picked{background:linear-gradient(170deg,rgba(44,45,48,.9),rgba(22,23,25,.94))}
 .quiz-trust{background:rgba(8,8,9,.55)}
+
+/* ===================== v16: questions on LusterLux green, carbon only on the left ===================== */
+.quiz-card.carbon .quiz-main,.quiz-main{background:
+  radial-gradient(90% 70% at 50% 0%,rgba(255,255,255,.28),transparent 60%),
+  radial-gradient(70% 60% at 100% 100%,rgba(0,0,0,.18),transparent 70%),
+  linear-gradient(160deg,#a9e21c 0%,#8bc303 45%,#6f9e00 100%)!important}
+.quiz-main .quiz-n{color:#203300}
+.quiz-main .quiz-q h2,.quiz-main .quiz-done h2,.quiz-main .quiz-load li{color:#0b0b0c}
+.quiz-main .quiz-back{color:#203300}
+.quiz-main .quiz-back:hover{color:#000}
+.quiz-main .quiz-load li span{background:#0b0b0c;color:var(--lime)}
+.quiz-main .quiz-meter{background:rgba(0,0,0,.18)}
+.quiz-main .quiz-meter i{background:#0b0b0c}
+.quiz-trust{background:rgba(0,0,0,.12);border-bottom:1px solid rgba(0,0,0,.12)}
+.quiz-trust li{color:#16220a}
+.quiz-trust svg{stroke:#16220a}
+/* answer cards stay dark so photos and products pop off the green */
+.qopt{background:linear-gradient(170deg,#1b1c1f,#0f1012);box-shadow:0 18px 34px -18px rgba(20,40,0,.7)}
+.qopt:hover{background:linear-gradient(170deg,#24262a,#141518);box-shadow:0 24px 44px -18px rgba(20,40,0,.8)}
+.qopt.is-picked{background:linear-gradient(170deg,#2a2c30,#17181b);box-shadow:0 0 0 3px #0b0b0c,0 24px 44px -18px rgba(20,40,0,.8)}
+.qopt.is-picked::after{background:#0b0b0c;color:var(--lime);box-shadow:0 0 0 2px var(--lime)}
+.qopt-lvl i{background:rgba(255,255,255,.16)}
+.quiz-main .quiz-opts .qopt{background:linear-gradient(170deg,#1b1c1f,#0f1012)}
+.quiz-main .quiz-opts .qopt:hover{background:linear-gradient(170deg,#24262a,#141518)}
+.quiz-main .quiz-opts .qopt.is-picked{background:linear-gradient(170deg,#2a2c30,#17181b)}
+.quiz-main .quiz-opts.is-photo .qopt{background:#0b0b0c}
+.quiz-main .quiz-trust{margin-bottom:18px}
