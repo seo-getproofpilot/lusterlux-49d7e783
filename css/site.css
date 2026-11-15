@@ -1360,3 +1360,4 @@ section{scroll-margin-top:70px}
   .quiz-trust li{flex:none;white-space:nowrap}
 }
 @media (max-width:860px){.quiz-card{grid-template-columns:minmax(0,1fr)!important}.quiz-side{grid-template-columns:minmax(0,1fr)}}
+.quiz-side .quiz-track{margin-bottom:auto}
