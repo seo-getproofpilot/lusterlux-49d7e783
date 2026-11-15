@@ -544,7 +544,6 @@
       ctx.clearRect(0, 0, W, H);
       const k = morph < .5 ? 'luxpro' : 'ceramicx';
       card.dataset.k = k;
-      $('[data-big-ix]').textContent = k === 'luxpro' ? '01 / 02' : '02 / 02';
       const cl = intro < 1 && morph < .5 ? 1 - intro : morph < .5 ? morph * 2 : 2 - morph * 2; // 0 bottle .. 1 molecule
       // the real photo takes over before the particles land, so the bottle never sits there pixelated
       const crispA = 1 - smooth(.04, .3, cl);
@@ -617,30 +616,33 @@
     ];
     const stars = '<span class="rv-stars" aria-label="5 out of 5 stars">★★★★★</span>';
     const meta = r => `<p class="rv-by"><b>${r.a}</b>${r.v ? '<span class="rv-ver">Verified buyer</span>' : ''}${r.k ? `<button type="button" class="rv-prod" data-open="${r.k}">${C[r.k].n}</button>` : ''}</p>`;
-    el.innerHTML = `<div class="rv-photos">${PHOTO.map(r => `<figure class="rv-pcard"><img src="${r.pic}" alt="Customer photo from ${r.a}" loading="lazy"><figcaption>${stars}<p>“${r.t}”</p>${meta(r)}</figcaption></figure>`).join('')}</div>
-      <div class="rv-text">${TEXT.map(r => `<blockquote class="rv-card">${stars}<p>“${r.t}”</p>${meta(r)}</blockquote>`).join('')}</div>`;
+    // one row: photo reviews and text reviews alternate, same size cards
+    const all = [];
+    for (let i = 0; i < Math.max(PHOTO.length, TEXT.length); i++) { if (PHOTO[i]) all.push(PHOTO[i]); if (TEXT[i]) all.push(TEXT[i]); }
+    el.innerHTML = all.map(r => `<figure class="rv-slide${r.pic ? ' has-pic' : ''}">${r.pic ? `<img src="${r.pic}" alt="Customer photo from ${r.a}" loading="lazy">` : ''}
+      <figcaption>${stars}<p>“${r.t}”</p>${meta(r)}</figcaption></figure>`).join('');
+    const step = () => (el.querySelector('.rv-slide')?.offsetWidth || 340) + 16;
+    const go = d => {
+      const max = el.scrollWidth - el.clientWidth;
+      el.scrollTo({ left: d > 0 && el.scrollLeft >= max - 4 ? 0 : el.scrollLeft + d * step(), behavior: reduce ? 'auto' : 'smooth' });
+    };
+    $$('[data-rv]').forEach(b => b.addEventListener('click', () => go(+b.dataset.rv)));
+    let paused = false, t;
+    el.addEventListener('pointerenter', () => paused = true); el.addEventListener('pointerleave', () => paused = false);
+    el.addEventListener('focusin', () => paused = true); el.addEventListener('focusout', () => paused = false);
+    if (!reduce) t = setInterval(() => { const r = el.getBoundingClientRect(); if (!paused && r.top < innerHeight && r.bottom > 0) go(1); }, 4500);
   })();
 
   /* ================= WALL: four columns that never stop, alternating up and down ================= */
   (function wall() {
     const el = $('[data-wall]'); if (!el) return;
+    const build = () => {
     const N = 65, cols = [[], [], [], []];
     for (let i = 0; i < N; i++) cols[i % 4].push(`img/wall/w${String(i).padStart(2, '0')}.webp`);
-    el.innerHTML = cols.map((c, i) => `<div class="wall-col ${i % 2 ? 'down' : 'up'}" style="--dur:${[92, 78, 104, 86][i]}s"><div class="wall-track">${c.concat(c).map((s, j) => `<figure><img src="${s}" alt="" loading="${j < 3 ? 'eager' : 'lazy'}" decoding="async"></figure>`).join('')}</div></div>`).join('');
-    if (reduce) return;
-    // scrolling past speeds the wall up, then it eases back to its slow drift
-    let boost = 0, last = scrollY, raf = 0;
-    const tick = () => {
-      boost *= .92;
-      $$('.wall-track', el).forEach(t => t.getAnimations().forEach(a => { a.playbackRate = 1 + boost; }));
-      raf = boost > .02 ? requestAnimationFrame(tick) : 0;
+    // same slow drift on every column, no scroll effect
+    el.innerHTML = cols.map((c, i) => `<div class="wall-col ${i % 2 ? 'down' : 'up'}" style="--dur:${Math.round(c.length * 9)}s"><div class="wall-track">${c.concat(c).map((s, j) => `<figure><img src="${s}" alt="" decoding="async"></figure>`).join('')}</div></div>`).join('');
     };
-    addEventListener('scroll', () => {
-      const r = el.getBoundingClientRect(), dy = Math.abs(scrollY - last); last = scrollY;
-      if (r.bottom < 0 || r.top > innerHeight) return;
-      boost = Math.min(9, boost + dy * .06);
-      if (!raf) raf = requestAnimationFrame(tick);
-    }, { passive: true });
+    new IntersectionObserver((en, ob) => { if (en[0].isIntersecting) { build(); ob.disconnect(); } }, { rootMargin: '1200px 0px' }).observe(el);
   })();
 
   /* ================= INSTAGRAM PHONE: their reels, cycling ================= */

@@ -683,3 +683,72 @@ section{scroll-margin-top:70px}
 }
 .quiz-opts.is-photo .qopt{grid-template-rows:1fr auto auto}
 @media (max-width:860px){.ig-copy h2{font-size:clamp(22px,7.4vw,40px)}}
+
+/* ================= v5: Chris's round =================
+   showcase: just the bottle on the page, a faint LusterLux watermark behind it, no card, border, floor or reflection */
+.big-card{background:none!important;box-shadow:none!important;border-radius:0;overflow:visible}
+.big-card::before,.big-bg,.big-floor,.big-ix{display:none!important}
+.big-mark{position:absolute;left:50%;top:50%;width:min(118%,760px);max-width:none;transform:translate(-50%,-50%);opacity:.06;filter:grayscale(1) brightness(1.8);pointer-events:none;z-index:0}
+.big-img{bottom:4%!important;height:90%!important;-webkit-box-reflect:none!important;filter:drop-shadow(0 26px 30px rgba(0,0,0,.55))!important}
+.big-p{min-height:110vh}
+.big-pre{display:block;font-size:13px;letter-spacing:.2em;color:var(--acc);margin-bottom:10px}
+.big-pre::before{display:none}
+.big-desc{font-size:18px;line-height:1.7;color:#e6e6e3;max-width:34em;margin-top:22px}
+.big-spec{margin:28px 0 0;max-width:600px;border-top:1px solid rgba(255,255,255,.12)}
+.big-spec div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:18px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.big-spec dt{font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#8e8e92;padding-top:2px}
+.big-spec dd{margin:0;font-size:16px;line-height:1.5;color:#f0f0ed}
+.big-buy{margin-top:30px}
+
+/* reviews: one row, a carousel, same-size cards */
+.rv-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.rv-head h2{flex:1 1 560px}
+.rv-ctl{display:flex;gap:10px}
+.rv-arrow{width:54px;height:54px;border:0;background:#fff;color:var(--ink);font-size:20px;font-weight:900;transform:skewX(var(--skew));transition:background .25s}
+.rv-arrow:hover{background:var(--lime)}
+.rv-rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 0 10px;margin:0 calc(var(--gut) * -1);padding-left:var(--gut);scroll-padding-left:var(--gut)}
+.rv-rail::-webkit-scrollbar{display:none}
+.rv-rail::after{content:"";flex:0 0 var(--gut)}
+.rv-slide{flex:0 0 clamp(280px,26vw,360px);height:460px;margin:0;scroll-snap-align:start;position:relative;border-radius:16px;overflow:hidden;background:#151618;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);display:grid;align-content:end}
+.rv-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rv-slide figcaption{position:relative;padding:24px}
+.rv-slide.has-pic figcaption{padding-top:90px;background:linear-gradient(0deg,rgba(0,0,0,.94) 40%,rgba(0,0,0,.6) 75%,transparent)}
+.rv-slide:not(.has-pic){align-content:center;background:radial-gradient(90% 70% at 0% 0%,rgba(139,195,3,.14),transparent 60%),#151618}
+.rv-slide:not(.has-pic) p{font-size:19px;line-height:1.5}
+.rv-slide p{font-size:16px;line-height:1.5;color:#f1f1ee;margin:10px 0 14px}
+.rv-slide .rv-stars{font-size:17px}
+
+/* instagram: give it the room */
+.ig{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);min-height:100svh;padding-top:clamp(100px,10vw,160px);padding-bottom:clamp(100px,10vw,160px)}
+.iphone{width:min(470px,36vw);border-radius:68px;padding:14px;transform:rotate(-3deg)}
+.iphone-screen{border-radius:55px}
+.iphone-island{top:30px;height:36px}
+.reel-top{top:78px;font-size:22px}
+.reel figcaption{font-size:15px;bottom:78px}
+.reel-who{bottom:32px;font-size:15px}
+.reel-who img{width:36px;height:36px}
+.ig-copy h2{font-size:clamp(30px,4.2vw,76px)}
+.ig-prof b{font-size:20px}
+.ig-prof p{font-size:17px}
+.ig-av{width:78px;height:78px}
+.ig-grid{max-width:none;gap:8px}
+.ig-grid a{border-radius:6px}
+
+@media (max-width:1100px){
+  .iphone{width:min(420px,70vw)}
+}
+@media (max-width:860px){
+  .big-img{height:86%!important}
+  .big-spec div{grid-template-columns:96px minmax(0,1fr);gap:12px;padding:12px 0}
+  .big-spec dd{font-size:14.5px}
+  .big-desc{font-size:16px}
+  .rv-arrow{width:44px;height:44px}
+  .rv-slide{flex-basis:78vw;height:420px}
+  .rv-slide:not(.has-pic) p{font-size:17px}
+  .ig{min-height:0}
+  .iphone{width:min(330px,82vw);border-radius:56px}
+  .iphone-screen{border-radius:44px}
+  .ig-copy h2{font-size:clamp(22px,7.4vw,40px)}
+}
+.rv-head .kicker{flex-basis:100%;margin-bottom:0}
+@media (min-width:1101px){.iphone{width:min(470px,36vw,calc(90svh * 9 / 19.3))}}
