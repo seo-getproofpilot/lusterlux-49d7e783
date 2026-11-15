@@ -73,6 +73,59 @@
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {} };
   const cartEl = $('[data-cart]'), scrim = $('[data-cart-scrim]'), countEl = $('[data-cart-count]');
   const permalink = obj => 'https://lusterluxauto.com/cart/' + Object.keys(obj).map(k => C[k].vid + ':' + obj[k]).join(',');
+  /* ---- cart upsells ----
+     $49 free shipping is LusterLux's real line. The 10% / 15% tiers, their codes and the next-bottle perk are PROPOSED offers:
+     the codes must be created in Shopify (Discounts) before launch. Shopify applies ?discount=CODE from a cart permalink. */
+  const TIERS = [{ at: 49, label: 'free shipping' }, { at: 85, label: '10% off', pct: 10, code: 'LUX10' }, { at: 125, label: '15% off', pct: 15, code: 'LUX15' }];
+  const TOP = TIERS[TIERS.length - 1].at;
+  // what each product is most often bought with
+  const PAIR = { luxpro: ['edgeless', 'luxquick'], ceramicx: ['edgeless', 'luxquick'], luxquick: ['edgeless', 'ceramicx'], edgeless: ['luxpro', 'luxquick'],
+    luxfoam: ['luxmit', 'luxdry'], luxmit: ['luxbucket', 'luxfoam'], luxbucket: ['luxmit', 'luxfoam'], luxdry: ['luxquick', 'edgeless'], luxcannon: ['luxfoam', 'luxdry'], foamx: ['luxfoam', 'luxmit'], luxgun: ['luxcannon', 'luxfoam'],
+    wheelassassin: ['wheelbrush', 'tirevenom'], tirevenom: ['xpad', 'wheelassassin'], wheelbrush: ['tirebrush', 'wheelassassin'], tirebrush: ['wheelbrush', 'tirevenom'], xpad: ['tirevenom', 'restorx'],
+    interiorx: ['microlux', 'restorx'], restorx: ['xpad', 'interiorx'], microlux: ['interiorx', 'luxbrush'], luxbrush: ['interiorx', 'microlux'], luxwindow: ['luxpro', 'edgeless'],
+    newcarember: ['vanillaember', 'interiorx'], vanillaember: ['newcarember', 'interiorx'], luxbug: ['luxfoam', 'luxmit'] };
+  const STARTERS = ['waterlesssys', 'completesys', 'essentials'];
+  // everything the shopper already has, with kits opened up into their parts
+  const owned = () => { const o = {}; Object.keys(cart).forEach(k => { (C[k].parts || [k]).forEach(p => { o[p] = (o[p] || 0) + cart[k]; }); }); return o; };
+  // the best kit move: a swap that costs less, or an upgrade where the kit adds more than it costs
+  function kitMove() {
+    let best = null; const own = owned();
+    KITS.forEach(K => {
+      if (cart[K]) return;
+      const left = { ...cart }, have = [], miss = [];
+      C[K].parts.forEach(p => { if (left[p] > 0) { left[p]--; have.push(p); } else miss.push(p); });
+      if (!have.length || have.length < Math.ceil(C[K].parts.length / 2) || miss.some(x => own[x])) return;
+      const extra = C[K].price - sum(have), gain = sum(miss) - extra;
+      if (gain > .5 && (!best || gain > best.gain)) best = { K, have, miss, extra, gain };
+    });
+    return best;
+  }
+  function upsellHTML(keys, sub) {
+    if (!keys.length) return `<div class="up-block"><p class="up-k">Popular first orders</p><div class="up-pairs">${STARTERS.map(k => pairCard(k, '')).join('')}</div></div>`;
+    let h = '';
+    const m = kitMove();
+    if (m) {
+      const kitN = C[m.K].n, missN = [...new Set(m.miss)].map(p => C[p].n).join(' + ');
+      h += `<div class="up-kit"><img src="${img(m.K)}" alt=""><div><p class="up-k">${m.extra <= 0 ? 'Same items, lower price' : 'Upgrade and get more'}</p>
+        <b>${m.extra <= 0 ? `Swap to the ${kitN} and save ${money(-m.extra)}` : `${kitN}: ${money(m.extra)} more adds ${missN}`}</b>
+        ${m.extra > 0 ? `<span>That's ${money(sum(m.miss))} of product for ${money(m.extra)}.</span>` : missN ? `<span>Plus ${missN} at no extra cost.</span>` : ''}</div>
+        <button type="button" class="up-btn" data-swap="${m.K}">${m.extra <= 0 ? 'Swap' : 'Upgrade'}</button></div>`;
+    }
+    const o = owned(), next = TIERS.find(t => sub < t.at), gap = next ? next.at - sub : 0;
+    let cand = [...new Set(Object.keys(o).flatMap(k => PAIR[k] || []))].filter(k => !o[k] && C[k]);
+    // lead with whatever closes the gap to the next reward for the least money
+    cand.sort((a, b) => { const ca = C[a].price >= gap, cb = C[b].price >= gap; return next && ca !== cb ? (ca ? -1 : 1) : next && ca ? C[a].price - C[b].price : 0; });
+    cand = cand.slice(0, 2);
+    if (cand.length) h += `<div class="up-block"><p class="up-k">Goes with your order</p><div class="up-pairs">${cand.map(k => pairCard(k, next && C[k].price >= gap ? `Unlocks ${next.label}` : '')).join('')}</div></div>`;
+    return h;
+  }
+  const pairCard = (k, flag) => `<div class="up-pair">${flag ? `<span class="up-flag">${flag}</span>` : ''}<button type="button" class="up-pic" data-open="${k}" aria-label="Details for ${C[k].n}"><img src="${img(k)}" alt="" loading="lazy"></button>
+      <b>${C[k].n}</b><span class="up-px">${money(C[k].price)}</span><button type="button" class="up-add" data-add="${k}" aria-label="Add ${C[k].n} to cart">+ Add</button></div>`;
+  function ladderHTML(sub) {
+    const next = TIERS.find(t => sub < t.at), got = TIERS.filter(t => sub >= t.at);
+    return `<p class="lad-h"><span class="lad-main">${next ? `<b>${money(next.at - sub)}</b> away from <b>${next.label}</b>` : '<b>Every reward unlocked</b>'}</span>${got.length && next ? `<span class="lad-got">${got.map(t => t.label).join(' + ')} unlocked</span>` : ''}</p>
+      <div class="lad-bar" style="--p:${Math.min(1, sub / TOP)}"><i></i>${TIERS.map(t => `<em class="${sub >= t.at ? 'on' : ''}" style="--x:${t.at / TOP}"><s></s><small>${money(t.at).replace('.00', '')}<br>${t.label}</small></em>`).join('')}</div>`;
+  }
   function renderCart(bump) {
     Object.keys(cart).forEach(k => { if (!C[k] || cart[k] <= 0) delete cart[k]; });
     const keys = Object.keys(cart), n = keys.reduce((s, k) => s + cart[k], 0), sub = keys.reduce((s, k) => s + C[k].price * cart[k], 0);
@@ -83,9 +136,15 @@
         <span class="px">${money(C[k].price * cart[k])}</span></li>`).join('') : '<li class="cart-empty">Nothing in here yet.</li>';
     $('[data-cart-sub]').textContent = money(sub);
     const ship = $('[data-ship]');
-    if (ship) { ship.innerHTML = !n ? '' : sub >= FREE ? '<b>Free shipping</b> unlocked' : `<b>${money(FREE - sub)}</b> away from free shipping`; ship.style.setProperty('--p', Math.min(1, sub / FREE)); ship.hidden = !n; }
+    if (ship) { ship.innerHTML = n ? ladderHTML(sub) : ''; ship.hidden = !n; }
+    const ups = $('[data-upsell]'); if (ups) ups.innerHTML = upsellHTML(keys, sub);
+    const tier = TIERS.filter(t => sub >= t.at && t.pct).pop(), disc = tier ? Math.round(sub * tier.pct) / 100 : 0;
+    const dl = $('[data-cart-disc]'); if (dl) { dl.hidden = !disc; dl.innerHTML = `<span>${tier ? tier.label : ''}</span><strong>−${money(disc)}</strong>`; }
+    const sl = $('[data-cart-shipline]'); if (sl) { sl.hidden = !n; sl.innerHTML = `<span>Shipping</span><strong>${sub >= FREE ? 'Free' : 'At checkout'}</strong>`; }
+    const tl = $('[data-cart-total]'); if (tl) tl.textContent = money(sub - disc);
+    const pk = $('[data-perk]'); if (pk) pk.hidden = !n;
     const co = $('[data-checkout]');
-    co.href = keys.length ? permalink(cart) : '#';
+    co.href = keys.length ? permalink(cart) + (tier ? `?discount=${tier.code}` : '') : '#';
     co.toggleAttribute('aria-disabled', !keys.length);
   }
   let toastT;
@@ -102,6 +161,8 @@
   }
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-add]'); if (a && a.dataset.add) add(a.dataset.add.split(','), +(a.dataset.qty || 1));
+    const sw = e.target.closest('[data-swap]');
+    if (sw) { const m = kitMove(); if (m && m.K === sw.dataset.swap) { m.have.forEach(p => { cart[p]--; }); cart[m.K] = (cart[m.K] || 0) + 1; save(); renderCart(true); toast(`Upgraded to the ${C[m.K].n}`); } }
     const q = e.target.closest('[data-q]');
     if (q) { const k = q.dataset.q; cart[k] = Math.max(0, (cart[k] || 0) + +q.dataset.d); save(); renderCart(); }
     if (e.target.closest('[data-cart-open]')) openCart(true);
@@ -546,7 +607,17 @@
     const wrap = $('[data-shop-aisles]'), chips = $('[data-shop-chips]');
     if (!wrap) return;
     const keysOf = types => Object.keys(C).filter(k => types.includes(typeOf(k)));
-    chips.innerHTML = [['all', 'All'], ...AISLES.map(a => [a.cat, a.h])].map(([c, l], i) => `<button type="button" role="tab" data-cat="${c}" aria-selected="${i === 0}"><span>${l}</span></button>`).join('');
+    const CI = {
+      all: '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+      wash: '<path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/>',
+      towels: '<path d="M4 7h13a3 3 0 0 1 3 3v8H7a3 3 0 0 1-3-3z"/><path d="M4 7v8"/><path d="M9 12h7"/>',
+      wheels: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 3.5V9M12 15v5.5M3.5 12H9M15 12h5.5"/>',
+      protect: '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+      interior: '<path d="M8 3h4a2 2 0 0 1 2 2l-1 8h4a2 2 0 0 1 2 2v4H7.5L6 5a2 2 0 0 1 2-2z"/><path d="M8 21v-2M17 21v-2"/>',
+      kits: '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+    };
+    const count = c => c === 'all' ? Object.keys(C).length : keysOf(AISLES.find(a => a.cat === c).types).length;
+    chips.innerHTML = [['all', 'All'], ...AISLES.map(a => [a.cat, a.h])].map(([c, l], i) => `<button type="button" role="tab" data-cat="${c}" aria-selected="${i === 0}"><i class="chip-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${CI[c]}</svg></i><span>${l}</span><em>${count(c)}</em></button>`).join('');
     wrap.innerHTML = AISLES.map(a => `<div class="aisle" data-aisle="${a.cat}"><div class="aisle-bar"><h3>${a.h}</h3><p>${a.p}</p></div>${groupsHTML(keysOf(a.types), false, true)}</div>`).join('');
     let cat = 'all';
     function filter() {

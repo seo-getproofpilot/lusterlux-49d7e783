@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=100">
+<link rel="stylesheet" href="css/site.css?v=105">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="llc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".42" stop-color="#e3e5e8"/><stop offset=".52" stop-color="#8e949c"/><stop offset=".72" stop-color="#cfd2d6"/><stop offset="1" stop-color="#f6f7f8"/></linearGradient><linearGradient id="llglass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a4a55"/><stop offset=".5" stop-color="#0d1317"/><stop offset="1" stop-color="#22303a"/></linearGradient><radialGradient id="llrim"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#b9bdc2"/><stop offset="1" stop-color="#6f757c"/></radialGradient><linearGradient id="llg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4ef2a"/><stop offset=".55" stop-color="#8bc303"/><stop offset="1" stop-color="#39d1fd"/></linearGradient></defs></svg>
@@ -135,7 +135,7 @@
 <section class="shop" id="shop" aria-labelledby="shop-h">
   <header class="shop-head">
     <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>Shop the line</p>
-    <h2 id="shop-h">Every product, sorted by job.</h2>
+    <h2 id="shop-h">Stock your garage.</h2>
     <p>Tap any product for the full details, or add it straight to your cart.</p>
   </header>
   <div class="picks" id="picks" data-picks hidden></div>
@@ -253,18 +253,25 @@
 <div class="cart-scrim" data-cart-scrim hidden></div>
 <aside class="cart" data-cart aria-label="Cart" aria-hidden="true">
   <header><h3>Your cart</h3><button type="button" data-cart-close aria-label="Close cart">×</button></header>
+  <div class="cart-ship" data-ship hidden></div>
   <ul class="cart-lines" data-cart-lines></ul>
+  <div class="cart-up" data-upsell></div>
   <footer>
-    <div class="cart-ship" data-ship hidden></div>
-    <div class="cart-sub"><span>Subtotal</span><strong data-cart-sub>$0.00</strong></div>
+    <div class="cart-rows">
+      <div class="cart-sub"><span>Subtotal</span><strong data-cart-sub>$0.00</strong></div>
+      <div class="cart-row" data-cart-shipline hidden></div>
+      <div class="cart-row is-disc" data-cart-disc hidden></div>
+      <div class="cart-row is-total"><span>Total</span><strong data-cart-total>$0.00</strong></div>
+    </div>
     <a class="btn" data-checkout href="#" data-arrow><span>Checkout</span></a>
+    <p class="cart-perk" data-perk hidden><i aria-hidden="true"></i>Every order gets $3 off your next bottle, emailed when it ships.</p>
     <p class="cart-note">Secure checkout on lusterluxauto.com</p>
   </footer>
 </aside>
 <div class="toast" data-toast role="status"></div>
 
 <script src="js/details.js?v=70"></script>
-<script src="js/site.js?v=100"></script>
+<script src="js/site.js?v=105"></script>
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
 <script type="module" src="js/bottle3d.js?v=71"></script>
 </body>
