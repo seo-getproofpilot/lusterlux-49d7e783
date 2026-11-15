@@ -6,12 +6,11 @@
 <title>LusterLux Detailing Products | Waterless Wash, Ceramic Spray &amp; Dressings</title>
 <meta name="description" content="Detailing products built in Arizona by two 18-year-olds. Answer three questions and get a kit matched to your experience, your vehicle and how you wash.">
 <link rel="icon" href="img/brand/favicon.png">
-<link rel="preload" as="image" href="img/hero/foam-d.webp" media="(min-width:861px)">
-<link rel="preload" as="image" href="img/hero/foam-m.webp" media="(max-width:860px)">
+<link rel="preload" as="image" href="img/hero/s-luxfoam.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=21">
+<link rel="stylesheet" href="css/site.css?v=30">
 </head>
 <body>
 
@@ -35,34 +34,35 @@
 
 <main>
 
-<!-- ============ HERO: their own shoot, LuxFoam + the Huracán ============ -->
+<!-- ============ HERO: a waving hex sheet + their own products on real cars ============ -->
 <section class="hero" aria-label="LusterLux">
+  <canvas class="hero-hex" data-hex aria-hidden="true"></canvas>
   <div class="hero-media">
-    <picture>
-      <source media="(max-width:860px)" srcset="img/hero/foam-m.webp">
-      <img src="img/hero/foam-d.webp" alt="A bottle of LuxFoam held up in front of a blue Lamborghini Huracán in a driveway" width="1500" height="2250" fetchpriority="high">
-    </picture>
+    <figure class="slide is-on" data-slide><img src="img/hero/s-luxfoam.webp" alt="A bottle of LuxFoam held up in front of a blue Lamborghini Huracán in a driveway" fetchpriority="high"></figure>
+    <figure class="slide" data-slide><img src="img/hero/s-ceramicx.webp" alt="CeramicX held in front of a gloss black McLaren" decoding="async"></figure>
+    <figure class="slide" data-slide><img src="img/hero/s-luxquick.webp" alt="LuxQuick held in front of a dark green Huracán" decoding="async"></figure>
+    <figure class="slide" data-slide><img src="img/hero/s-restorx.webp" alt="RestorX held against the grille of a matte Maserati" decoding="async"></figure>
+    <figure class="slide" data-slide><img src="img/hero/s-tirevenom.webp" alt="TireVenom held beside a black wheel" decoding="async"></figure>
+    <figure class="slide" data-slide><img src="img/hero/s-luxpro.webp" alt="LuxPro held in front of a black McLaren in a graffiti garage" decoding="async"></figure>
+    <nav class="slide-nav" aria-label="Products in the photos"><button type="button" data-slide-go><span>LuxFoam</span><i></i></button><button type="button" data-slide-go><span>CeramicX</span><i></i></button><button type="button" data-slide-go><span>LuxQuick</span><i></i></button><button type="button" data-slide-go><span>RestorX</span><i></i></button><button type="button" data-slide-go><span>TireVenom</span><i></i></button><button type="button" data-slide-go><span>LuxPro</span><i></i></button></nav>
   </div>
-  <svg class="hero-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M8 -4 Q 66 50 8 104"/><path d="M92 -4 Q 34 50 92 104"/></svg>
   <div class="hero-copy">
     <p class="kicker"><span class="hatch" aria-hidden="true"></span>Detailing products · Made in Arizona</p>
     <h1>Your current detailing products should be <span class="chrome">nervous.</span></h1>
-    <p class="hero-sub">Built by two 18-year-olds who got sick of streaks and greasy finishes. Tell us what you drive and how you wash, and we'll hand you the kit.</p>
+    <p class="hero-sub">Built by two 18-year-olds who got sick of streaks and greasy finishes. Answer three questions and we'll walk you straight to the right bottles.</p>
     <div class="hero-ctas">
-      <a class="btn" href="#quiz"><span>Find my kit</span></a>
+      <a class="btn" href="#quiz"><span>Find my products</span></a>
       <a class="btn btn-ghost" href="#shop"><span>Shop the line</span></a>
     </div>
   </div>
 </section>
 
-<!-- ============ QUIZ FUNNEL ============ -->
+<!-- ============ QUIZ FUNNEL: three taps, then into the shop ============ -->
 <section class="quiz" id="quiz" aria-labelledby="quiz-h">
   <div class="quiz-card" data-quiz>
     <header class="quiz-top">
-      <p class="kicker dark"><span class="hatch" aria-hidden="true"></span>Find your kit · 3 questions</p>
-      <ol class="quiz-steps" data-quiz-steps aria-label="Progress">
-        <li>Experience</li><li>Vehicle</li><li>Water</li><li>Your kit</li>
-      </ol>
+      <p class="kicker"><span class="hatch" aria-hidden="true"></span>Find your products</p>
+      <div class="quiz-bars" data-quiz-bars aria-hidden="true"><i></i><i></i><i></i></div>
     </header>
     <div class="quiz-body" data-quiz-body aria-live="polite"></div>
   </div>
@@ -76,8 +76,13 @@
   </header>
   <div class="big-grid">
     <div class="big-media">
-      <div class="big-card" data-big-card>
+      <div class="big-card" data-big-card data-k="luxpro">
         <div class="big-light" aria-hidden="true"></div>
+        <div class="big-hex" aria-hidden="true"></div>
+        <span class="big-ghost g-luxpro" aria-hidden="true">LuxPro</span>
+        <span class="big-ghost g-ceramicx" aria-hidden="true">CeramicX</span>
+        <div class="big-strip l" aria-hidden="true"></div><div class="big-strip r" aria-hidden="true"></div>
+        <div class="big-floor" aria-hidden="true"></div>
         <img class="big-img is-on" data-big-img="luxpro" src="img/cut/luxpro.webp" alt="LuxPro bottle">
         <img class="big-img" data-big-img="ceramicx" src="img/cut/ceramicx.webp" alt="CeramicX bottle">
         <canvas class="big-canvas" data-big-canvas aria-hidden="true"></canvas>
@@ -132,6 +137,7 @@
     <h2 id="shop-h">Every product, sorted by job.</h2>
     <p>Each card tells you what it does and which step it belongs to. Anything marked <span class="easy-dot" aria-hidden="true"></span><b>Easy</b> is safe for your first wash.</p>
   </header>
+  <div class="picks" id="picks" data-picks hidden></div>
   <div class="shop-bar" data-shop-bar>
     <div class="shop-chips" role="tablist" aria-label="Filter by job" data-shop-chips></div>
     <label class="shop-easy"><input type="checkbox" data-shop-easy><span>Easy only</span></label>
@@ -148,9 +154,9 @@
   </header>
   <div class="film" data-film>
     <div class="film-col" data-speed="-0.12">
-      <figure><img src="img/p/luxcannon-2.jpg" alt="Foaming a white car on a paver driveway with the LuxCannon" loading="lazy"><figcaption>LuxCannon + LuxFoam</figcaption></figure>
+      <figure><img src="img/p/luxcannon-1.jpg" alt="A white Lamborghini covered in foam from the LuxCannon" loading="lazy"><figcaption>LuxCannon + LuxFoam</figcaption></figure>
       <figure><img src="img/p/luxpro-2.jpg" alt="LuxPro held in front of a matte blue hood" loading="lazy"><figcaption>LuxPro</figcaption></figure>
-      <figure><img src="img/p/tirevenom-2.jpg" alt="TireVenom held beside a black wheel" loading="lazy"><figcaption>TireVenom</figcaption></figure>
+      <figure><img src="img/p/tirevenom-4.jpg" alt="TireVenom on the floor beside a black wheel" loading="lazy"><figcaption>TireVenom</figcaption></figure>
     </div>
     <div class="film-col" data-speed="0.08">
       <figure><img src="img/p/luxwheelassassin-4.jpg" alt="Foamed wheel and tire after LuxWheelAssassin" loading="lazy"><figcaption>LuxWheelAssassin</figcaption></figure>
@@ -159,11 +165,11 @@
     </div>
     <div class="film-col" data-speed="-0.18">
       <figure><img src="img/p/luxtowel-3.jpg" alt="Green LuxDry towel draped on a grey hood" loading="lazy"><figcaption>LuxDry towel</figcaption></figure>
-      <figure><img src="img/p/restorx-1.jpg" alt="RestorX held against a matte Maserati grille" loading="lazy"><figcaption>RestorX</figcaption></figure>
-      <figure><img src="img/p/ceramicx-1.jpg" alt="CeramicX held in front of a gloss black McLaren" loading="lazy"><figcaption>CeramicX</figcaption></figure>
+      <figure><img src="img/p/restorx-2.jpg" alt="RestorX set in a honeycomb grille" loading="lazy"><figcaption>RestorX</figcaption></figure>
+      <figure><img src="img/p/ceramicx-3.jpg" alt="CeramicX held in front of a graffiti wall" loading="lazy"><figcaption>CeramicX</figcaption></figure>
     </div>
     <div class="film-col" data-speed="0.14">
-      <figure><img src="img/p/luxquick-3.jpg" alt="LuxQuick held in front of a dark green Huracán" loading="lazy"><figcaption>LuxQuick</figcaption></figure>
+      <figure><img src="img/p/luxquick-4.jpg" alt="LuxQuick held over a dark green Huracán" loading="lazy"><figcaption>LuxQuick</figcaption></figure>
       <figure><img src="img/p/lux-3.jpg" alt="Curved brush working a McLaren door sill" loading="lazy"><figcaption>Lux Brush</figcaption></figure>
       <figure><img src="img/p/luxfoam-4.jpg" alt="Foam sliding off a blue Huracán" loading="lazy"><figcaption>LuxFoam</figcaption></figure>
     </div>
@@ -245,6 +251,6 @@
 </aside>
 <div class="toast" data-toast role="status"></div>
 
-<script src="js/site.js?v=21"></script>
+<script src="js/site.js?v=30"></script>
 </body>
 </html>
