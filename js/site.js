@@ -51,6 +51,13 @@
     rimtiresys:    { n: 'Rim & Tire System', kit: 1, price: 85.99, vid: 59835924316241, img: 'img/p/acc-rimtiresys.webp', parts: ['wheelassassin', 'tirevenom', 'wheelbrush', 'tirebrush', 'xpad'], inc: ['LuxWheelAssassin (16 oz)', 'TireVenom (16 oz)', 'Lux Wheel Brush', 'Lux Tire Brush', '2 XPad applicators'], what: 'LuxWheelAssassin, TireVenom, both brushes and 2 XPads.', save: 'Saves $8.36' },
     ultimatesys:   { n: 'Ultimate Wash System', kit: 1, price: 124.99, vid: 59835930509393, img: 'img/p/acc-ultimatesys.webp', parts: ['luxgun', 'luxcannon', 'luxfoam', 'luxdry'], inc: ['LuxGun pressure washer gun', 'LuxCannon foam cannon', 'LuxFoam (16 oz)', 'LuxDry drying towel', '5 quick-connect nozzles', 'Quick-connect coupler'], what: 'LuxGun, LuxCannon, LuxFoam, LuxDry, 5 quick-connect nozzles and a coupler.', save: 'Saves $34.97, nozzles included' },
   };
+  const SPEC = {
+    luxpro: '16 oz · 15–30 cars per bottle', luxfoam: '16 oz · 8–16 washes per bottle', wheelassassin: '16 oz · 12–20 vehicles per bottle',
+    tirevenom: '16 oz · 30–50 tires · lasts up to 3 months', ceramicx: '16 oz · 10–20 cars · lasts up to 8 months', luxquick: '16 oz · 15–25 vehicles per bottle',
+    interiorx: '16 oz · 15–25 vehicles per bottle', restorx: '16 oz · 20–40 vehicles · up to 6 months outside', newcarember: '8 oz · 300–500 sprays',
+    vanillaember: '8 oz · 300–500 sprays', luxdry: '2 × 3 ft · 1300 GSM', edgeless: '3-pack · 16 × 16 in', microlux: '5-pack · 16 × 16 in', luxwindow: '2-pack · 16 × 16 in',
+    xpad: '2-pack', luxcannon: 'Needs a pressure washer', foamx: 'Cordless · rechargeable', luxgun: 'Quick-connect fittings',
+  };
   const BOTTLES = ['luxpro', 'luxfoam', 'wheelassassin', 'tirevenom', 'ceramicx', 'luxquick', 'interiorx', 'restorx'];
   const KITS = Object.keys(C).filter(k => C[k].kit);
   // real in-use photo for every single product; kits and XPad only exist as studio shots
@@ -392,19 +399,22 @@
   const card = k => { const it = C[k]; return `<article class="pcard" data-easy="${it.easy ? 1 : 0}" data-k="${k}">
         <button type="button" class="pcard-img${isPhoto(k) ? ' is-photo' : ''}" data-open="${k}" aria-label="Details for ${it.n}"><img src="${img(k)}" alt="" loading="lazy">
           ${it.kit ? '' : `<span class="pcard-step">Step ${it.step} · ${STEPS[it.step]}</span>`}${it.easy ? '<span class="pcard-easy">Easy</span>' : ''}<span class="pcard-more">View details</span></button>
-        <div class="pcard-body"><button type="button" class="pcard-name" data-open="${k}">${nameHTML(k)}</button><p>${it.what}</p>${it.save ? `<span class="pcard-save">${it.save}</span>` : ''}</div>
+        <div class="pcard-body"><button type="button" class="pcard-name" data-open="${k}">${nameHTML(k)}</button>${SPEC[k] ? `<span class="pcard-spec">${SPEC[k]}</span>` : ''}<p>${it.what}</p>${it.save ? `<span class="pcard-save">${it.save}</span>` : ''}</div>
         <div class="pcard-foot"><span class="pcard-px">${money(it.price)}</span><button class="pcard-add" type="button" data-add="${k}"><span>Add</span></button></div>
       </article>`; };
-  const SOON = { trail: ['Trail Foam', 'trail-foam-coming-soon'], boatext: ['Boat Exterior Cleaner', 'boat-exterior-cleaner-coming-soon'], boatint: ['Boat Interior Cleaner', 'boat-interior-cleaner-coming-soon'] };
+  // sets they don't sell as one SKU: added together, at the real combined price (no invented discount)
+  const SETS = {
+    bucket: { n: 'Bucket wash set', items: ['luxfoam', 'luxbucket', 'luxmit', 'luxdry'], p: 'Soap, bucket, mitt and drying towel. Everything for a hand wash.' },
+    ceramic: { n: 'Ceramic set', items: ['ceramicx', 'edgeless'], p: 'CeramicX plus the Edgeless towels it’s meant to be spread and buffed with.' },
+  };
   const FILL = {
-    soap: [['soon', 'trail'], ['soon', 'boatext']], foamtool: [['kit', 'foamsys']], washtool: [['kit', 'ultimatesys']],
-    wheelchem: [['kit', 'rimtiresys'], ['kit', 'tirecaresys']], wheeltool: [['photo', 'img/wall/w40.webp', 'LuxWheelAssassin, before the brush']],
-    protect: [['kit', 'paintsys'], ['kit', 'waterlesssys']], intool: [['kit', 'completeinteriorsys'], ['kit', 'interiorsys'], ['soon', 'boatint']],
+    soap: [['kit', 'waterlesssys'], ['kit', 'foamsys']], foamtool: [['kit', 'ultimatesys']], washtool: [['set', 'bucket']],
+    wheelchem: [['kit', 'tirecaresys'], ['kit', 'essentials']], wheeltool: [['kit', 'rimtiresys']],
+    protect: [['kit', 'paintsys'], ['set', 'ceramic']], intool: [['kit', 'completeinteriorsys'], ['kit', 'interiorsys'], ['kit', 'dualscent']],
   };
   const fillTile = f => {
-    if (f[0] === 'soon') { const [n, h] = SOON[f[1]]; return `<a class="ftile carbon is-soon" href="https://lusterluxauto.com/products/${h}" target="_blank" rel="noopener"><span class="ftile-badge">Coming soon</span><img src="img/brand/badge.png" alt="" class="ftile-mark"><b>${n}</b><span>Listed on their store. Not out yet.</span><em>Watch for it →</em></a>`; }
-    if (f[0] === 'kit') { const it = C[f[1]]; return `<div class="ftile carbon is-kit"><span class="ftile-badge">${it.save.startsWith('Saves') ? it.save : 'Bundle'}</span><button type="button" class="ftile-img" data-open="${f[1]}" aria-label="Details for ${it.n}"><img src="${img(f[1])}" alt="" loading="lazy"></button><b>Get it as a set</b><span>${it.n}: ${it.what}</span><div class="ftile-foot"><strong>${money(it.price)}</strong><button type="button" class="pcard-add" data-add="${f[1]}"><span>Add</span></button></div></div>`; }
-    if (f[0] === 'photo') return `<figure class="ftile is-photo"><img src="${f[1]}" alt="" loading="lazy"><figcaption>${f[2]}</figcaption></figure>`;
+    if (f[0] === 'kit') { const it = C[f[1]]; return `<div class="ftile carbon is-kit"><span class="ftile-badge">${it.save.startsWith('Saves') ? it.save : 'Bundle'}</span><button type="button" class="ftile-img" data-open="${f[1]}" aria-label="Details for ${it.n}"><img src="${img(f[1])}" alt="" loading="lazy"></button><span class="ftile-k">Get these as a set</span><b><button type="button" class="ftile-name" data-open="${f[1]}">${it.n}</button></b><span>${it.what}</span><div class="ftile-foot"><strong>${money(it.price)}</strong><button type="button" class="pcard-add" data-add="${f[1]}"><span>Add</span></button></div></div>`; }
+    if (f[0] === 'set') { const s = SETS[f[1]], tot = sum(s.items); return `<div class="ftile carbon is-kit is-set"><span class="ftile-badge">Buy together</span><div class="ftile-mini">${s.items.map(k => `<button type="button" data-open="${k}" aria-label="${C[k].n}"><img src="${img(k)}" alt="" loading="lazy"></button>`).join('')}</div><span class="ftile-k">${s.items.length} items, one click</span><b>${s.n}</b><span>${s.p}</span><div class="ftile-foot"><strong>${money(tot)}</strong><button type="button" class="pcard-add" data-add="${s.items.join(',')}"><span>Add all</span></button></div></div>`; }
     return '';
   };
   const groupsHTML = (keys, kitsFirst, fill) => {
@@ -573,6 +583,13 @@
       const crispA = 1 - smooth(.04, .3, cl);
       imgs.luxpro.style.opacity = k === 'luxpro' ? crispA : 0;
       imgs.ceramicx.style.opacity = k === 'ceramicx' ? crispA : 0;
+      // once the bottle is whole, it turns slowly on a turntable as you scroll its description
+      const art = arts[k === 'luxpro' ? 0 : 1], ar = art.getBoundingClientRect();
+      const sp = clamp((innerHeight - ar.top) / (ar.height + innerHeight));
+      const ang = reduce ? 0 : Math.sin(sp * Math.PI * 2) * 32 * (1 - cl);
+      const im = imgs[k];
+      im.style.transform = `translateX(-50%) perspective(1100px) rotateY(${ang.toFixed(2)}deg)`;
+      im.style.filter = `drop-shadow(${(-ang * .5).toFixed(1)}px 26px 30px rgba(0,0,0,.55)) brightness(${(1 + ang / 220).toFixed(3)})`;
       if (cl <= .04) return;
       project(t);
       const stick = smooth(.55, .95, cl);
