@@ -1395,3 +1395,11 @@ section{scroll-margin-top:70px}
 .quiz-main .quiz-opts .qopt.is-picked{background:linear-gradient(170deg,#2a2c30,#17181b)}
 .quiz-main .quiz-opts.is-photo .qopt{background:#0b0b0c}
 .quiz-main .quiz-trust{margin-bottom:18px}
+/* crisp copy on the green: solid black labels, bright text on the dark cards */
+.quiz-main .quiz-n,.quiz-main .quiz-back,.quiz-main .quiz-done-cta .quiz-back,.quiz-main .quiz-load .quiz-n{color:#0b0b0c!important;font-weight:900;opacity:1}
+.quiz-main .quiz-back:hover{color:#000;text-decoration:underline;text-underline-offset:4px}
+.quiz-main .quiz-done p,.quiz-main .quiz-done h2{color:#0b0b0c}
+.quiz-main .qopt b{color:#fff}
+.quiz-main .qopt-s{color:#e0e0de}
+.quiz-main .qopt-lvl em{color:#fff}
+.quiz-main .quiz-opts.is-photo .qopt-s{color:#f0f0ee}
