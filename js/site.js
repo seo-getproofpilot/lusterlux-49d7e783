@@ -41,7 +41,10 @@
     rimtiresys:    { n: 'Rim & Tire System', h: 'Rim & Tire System', plain: 1, kit: 1, price: 85.99, vid: 59835924316241, img: 'p/acc-rimtiresys.webp', step: 0, cat: 'kits', what: 'LuxWheelAssassin, TireVenom, both brushes and 2 XPads.', save: 'Saves $8.36' },
     completesys:   { n: 'Complete Detail System', h: 'Complete Detail System', plain: 1, kit: 1, price: 59.99, vid: 59835872477265, img: 'p/acc-completesys.jpg', step: 0, easy: 1, cat: 'kits', what: 'LuxPro, RestorX, InteriorX, 8 towels and an XPad. Inside and out.', save: 'Saves $50.95' },
   };
-  const img = k => C[k].cut ? `img/cut/sm/${k}.webp` : `img/${C[k].img}`;
+  const REAL = ['luxpro', 'luxfoam', 'luxcannon', 'foamx', 'luxmit', 'luxbucket', 'luxgun', 'luxdry', 'wheelassassin', 'tirevenom', 'wheelbrush', 'tirebrush', 'ceramicx', 'luxquick', 'edgeless', 'interiorx', 'restorx', 'microlux', 'luxbrush'];
+  // cards, quiz and cart use each product's own in-use photo; kits and XPad only exist as studio shots
+  const img = k => REAL.includes(k) ? `img/real/${k}.webp` : C[k].cut ? `img/cut/sm/${k}.webp` : `img/${C[k].img}`;
+  const isPhoto = k => REAL.includes(k) || C[k].kit;
   const title = (k, tag = 'h4') => `<${tag} class="${C[k].plain ? 'plain' : 'lbl'}">${C[k].h}</${tag}>`;
 
   /* ---------------- cart ---------------- */
@@ -57,7 +60,7 @@
     countEl.textContent = n;
     countEl.classList.toggle('has', n > 0);
     if (bump) { countEl.classList.remove('bump'); void countEl.offsetWidth; countEl.classList.add('bump'); }
-    $('[data-cart-lines]').innerHTML = keys.length ? keys.map(k => `<li class="cline"><img src="${img(k)}" alt=""><div><b>${C[k].n}</b>
+    $('[data-cart-lines]').innerHTML = keys.length ? keys.map(k => `<li class="cline"><img class="${isPhoto(k) ? 'is-photo' : ''}" src="${img(k)}" alt=""><div><b>${C[k].n}</b>
         <span class="qty"><button type="button" data-q="${k}" data-d="-1" aria-label="Fewer">−</button>${cart[k]}<button type="button" data-q="${k}" data-d="1" aria-label="More">+</button></span></div>
         <span class="px">${money(C[k].price * cart[k])}</span></li>`).join('') : '<li class="cart-empty">Nothing in here yet.</li>';
     $('[data-cart-sub]').textContent = money(keys.reduce((s, k) => s + C[k].price * cart[k], 0));
@@ -247,7 +250,7 @@
         <div class="kit-head"><div class="kit-tags"><span>${LV[ans.lv]}</span><span>${VEH[ans.veh]}</span><span>${WAT[ans.water]}</span></div>
           <h2 id="quiz-h">${head}</h2><p>In the order you’ll use it. Tap ✓ to drop anything you already own.</p></div>
         <div class="kit-groups">${Object.keys(groups).sort((x, y) => x - y).map((s, gi) => `<div class="kit-group"><h4><i>${gi + 1}</i>${+s ? STEPS[s] : 'Start with the kit'}</h4><ul class="kit-list">${groups[s].map(k => `
-            <li class="kline${off.has(k) ? ' off' : ''}"><span class="kline-img"><img src="${img(k)}" alt="" loading="lazy"></span>
+            <li class="kline${off.has(k) ? ' off' : ''}"><span class="kline-img${isPhoto(k) ? ' is-photo' : ''}"><img src="${img(k)}" alt="" loading="lazy"></span>
               <div>${title(k, 'h5')}<p>${why(k, ans)}</p></div>
               <span class="kline-px">${money(C[k].price)}</span>
               <button class="kline-tog" type="button" data-tog="${k}" aria-pressed="${!off.has(k)}" aria-label="${off.has(k) ? 'Put back' : 'Remove'} ${C[k].n}">✓</button></li>`).join('')}</ul></div>`).join('')}
@@ -420,7 +423,7 @@
     chips.innerHTML = [['all', 'All'], ...AISLES.map(a => [a.cat, a.h])].map(([c, l], i) => `<button type="button" role="tab" data-cat="${c}" aria-selected="${i === 0}"><span>${l}</span></button>`).join('');
     wrap.innerHTML = AISLES.map(a => `<div class="aisle" data-aisle="${a.cat}"><div class="aisle-bar"><h3>${a.h}</h3><p>${a.p}</p></div>
       <div class="aisle-grid">${a.items.map(k => { const it = C[k]; return `<article class="pcard" data-easy="${it.easy ? 1 : 0}">
-        <div class="pcard-img${it.kit ? ' is-kit' : ''}"><img src="${img(k)}" alt="${it.n}" loading="lazy">
+        <div class="pcard-img${isPhoto(k) ? ' is-photo' : ''}"><img src="${img(k)}" alt="${it.n}" loading="lazy">
           ${it.kit ? '' : `<span class="pcard-step">Step ${it.step} · ${STEPS[it.step]}</span>`}${it.easy ? '<span class="pcard-easy">Easy</span>' : ''}</div>
         <div class="pcard-body">${title(k)}<p>${it.what}</p>${it.save ? `<span class="pcard-save">${it.save}</span>` : ''}</div>
         <div class="pcard-foot"><span class="pcard-px">${money(it.price)}</span><button class="pcard-add" type="button" data-add="${k}"><span>Add</span></button></div>
