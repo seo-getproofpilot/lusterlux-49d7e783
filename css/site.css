@@ -934,9 +934,9 @@ section{scroll-margin-top:70px}
 /* ================= v8 ================= */
 /* real carbon: generated 2x2 twill tile (tools/carbon.py) under a clearcoat sheen */
 .carbon,.aisle-bar,.picks-in,.ftile.carbon,.ftile.is-quiz{background-color:#0d0d0e!important;
-  background-image:radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 35%,transparent 62%,rgba(255,255,255,.05) 78%,transparent 90%),url("../img/carbon.png")!important;
+  background-image:radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 35%,transparent 62%,rgba(255,255,255,.05) 78%,transparent 90%),url("../img/carbon-real.jpg")!important;
   background-size:100% 100%,100% 100%,128px 128px!important;background-position:0 0,0 0,0 0!important}
-.ftile.is-quiz{background-image:radial-gradient(60% 90% at 100% 50%,rgba(139,195,3,.28),transparent 70%),radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.14),rgba(255,255,255,0) 55%),url("../img/carbon.png")!important;background-size:100% 100%,100% 100%,128px 128px!important}
+.ftile.is-quiz{background-image:radial-gradient(60% 90% at 100% 50%,rgba(139,195,3,.28),transparent 70%),radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.14),rgba(255,255,255,0) 55%),url("../img/carbon-real.jpg")!important;background-size:100% 100%,100% 100%,128px 128px!important}
 .quiz-card.carbon .quiz-main{background:linear-gradient(180deg,rgba(10,10,11,.72),rgba(10,10,11,.86))}
 .aisle-bar::after{opacity:.35}
 
@@ -990,8 +990,8 @@ section{scroll-margin-top:70px}
 .picks-inside{margin-top:26px}
 .picks-inside .pcard-foot{display:none}
 .picks-inside .pcard{opacity:.96}
-.carbon,.aisle-bar,.picks-in,.ftile.carbon,.ftile.is-quiz{background-image:radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.12),rgba(255,255,255,0) 55%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon.png")!important;background-size:100% 100%,100% 100%,88px 88px!important}
-.ftile.is-quiz{background-image:radial-gradient(60% 90% at 100% 50%,rgba(139,195,3,.28),transparent 70%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon.png")!important}
+.carbon,.aisle-bar,.picks-in,.ftile.carbon,.ftile.is-quiz{background-image:radial-gradient(120% 80% at 18% 0%,rgba(255,255,255,.12),rgba(255,255,255,0) 55%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon-real.jpg")!important;background-size:100% 100%,100% 100%,480px 480px!important}
+.ftile.is-quiz{background-image:radial-gradient(60% 90% at 100% 50%,rgba(139,195,3,.28),transparent 70%),linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),url("../img/carbon-real.jpg")!important}
 
 /* ===================== v10: soft, classy, inviting =====================
    Pill buttons (no skew): the primary has a neon light orbiting its edge, the light one is chrome with a shimmer.
@@ -1208,7 +1208,7 @@ section{scroll-margin-top:70px}
 .picks-go{color:#fff}
 .picks-go:hover{color:var(--lime)}
 /* bundle tiles: calmer weave under the text so every line reads */
-.ftile.carbon,.ftile.is-kit{background-image:linear-gradient(180deg,rgba(8,8,9,.35),rgba(8,8,9,.78) 55%,rgba(8,8,9,.9)),url("../img/carbon.png")!important;background-size:100% 100%,88px 88px!important}
+.ftile.carbon,.ftile.is-kit{background-image:linear-gradient(180deg,rgba(8,8,9,.35),rgba(8,8,9,.78) 55%,rgba(8,8,9,.9)),url("../img/carbon-real.jpg")!important;background-size:100% 100%,480px 480px!important}
 .ftile>span:not(.tag),.ftile p{color:#dededb!important}
 .ftile .ftile-k{color:#b9bcc1!important}
 .ftile b,.ftile .ftile-name{color:#fff!important}
@@ -1361,3 +1361,10 @@ section{scroll-margin-top:70px}
 }
 @media (max-width:860px){.quiz-card{grid-template-columns:minmax(0,1fr)!important}.quiz-side{grid-template-columns:minmax(0,1fr)}}
 .quiz-side .quiz-track{margin-bottom:auto}
+/* real carbon tile: lighter overlays so the weave actually shows */
+.quiz-card.carbon .quiz-main{background:radial-gradient(80% 60% at 50% 0%,rgba(255,255,255,.06),transparent 70%),linear-gradient(180deg,rgba(10,10,11,.38),rgba(10,10,11,.6))}
+.quiz-side{background:linear-gradient(180deg,rgba(12,12,14,.5),rgba(12,12,14,.66))}
+.qopt{background:linear-gradient(170deg,rgba(24,25,28,.82),rgba(14,15,17,.88))}
+.qopt:hover{background:linear-gradient(170deg,rgba(34,35,38,.88),rgba(18,19,21,.92))}
+.qopt.is-picked{background:linear-gradient(170deg,rgba(44,45,48,.9),rgba(22,23,25,.94))}
+.quiz-trust{background:rgba(8,8,9,.55)}
