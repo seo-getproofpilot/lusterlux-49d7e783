@@ -385,9 +385,9 @@
 
   /* ================= SHOP: grouped by what a thing IS ================= */
   const TYPE = {
-    soap: 'Wash bottles', foamtool: 'Foam tools', washtool: 'Mitts, buckets & sponges', towel: 'Towels',
-    wheelchem: 'Wheel & tire bottles', wheeltool: 'Brushes & pads', protect: 'Shine & protect sprays',
-    interiorchem: 'Interior & trim bottles', scent: 'Scent', intool: 'Detail brushes', kit: 'Systems',
+    soap: 'Wash soaps & waterless', foamtool: 'Foam cannons & sprayers', washtool: 'Mitts, buckets & sponges', towel: 'Drying & microfiber towels',
+    wheelchem: 'Wheel cleaner & tire dressing', wheeltool: 'Wheel brushes & applicators', protect: 'Ceramic & detail sprays',
+    interiorchem: 'Interior cleaner & trim dressing', scent: 'Air fresheners', intool: 'Detail brushes', kit: 'Kits & systems',
   };
   const TYPEOF = {
     luxpro: 'soap', luxfoam: 'soap', luxcannon: 'foamtool', foamx: 'foamtool', luxgun: 'foamtool', luxmit: 'washtool', luxbucket: 'washtool', luxbug: 'washtool',
@@ -464,12 +464,12 @@
 
   (function shop() {
     const AISLES = [
-      { cat: 'wash', h: 'Wash', p: 'Get the dirt off without scratching. Bottles first, then the tools that apply them.', types: ['soap', 'foamtool', 'washtool'] },
-      { cat: 'towels', h: 'Towels', p: 'One job per towel: drying, paint, interior, glass. Mixing them is how streaks happen.', types: ['towel'] },
-      { cat: 'wheels', h: 'Wheels & tires', p: 'Wheels get cleaned first so brake dust never splashes onto clean paint. Tires get dressed last.', types: ['wheelchem', 'wheeltool'] },
-      { cat: 'protect', h: 'Shine & protect', p: 'After the wash. Gloss, plus a layer that makes the next wash easier.', types: ['protect'] },
-      { cat: 'interior', h: 'Interior & trim', p: 'Cabin surfaces, faded plastic and the smell.', types: ['interiorchem', 'scent', 'intool'] },
-      { cat: 'kits', h: 'Systems', p: 'Bundles that cost less than the same items bought apart. Every saving shown is the real math.', types: ['kit'] },
+      { cat: 'wash', h: 'Wash & Foam', p: 'Get the dirt off without scratching. Bottles first, then the tools that apply them.', types: ['soap', 'foamtool', 'washtool'] },
+      { cat: 'towels', h: 'Towels & Drying', p: 'One job per towel: drying, paint, interior, glass. Mixing them is how streaks happen.', types: ['towel'] },
+      { cat: 'wheels', h: 'Wheels & Tires', p: 'Wheels get cleaned first so brake dust never splashes onto clean paint. Tires get dressed last.', types: ['wheelchem', 'wheeltool'] },
+      { cat: 'protect', h: 'Shine & Protection', p: 'After the wash. Gloss, plus a layer that makes the next wash easier.', types: ['protect'] },
+      { cat: 'interior', h: 'Interior & Trim', p: 'Cabin surfaces, faded plastic and the smell.', types: ['interiorchem', 'scent', 'intool'] },
+      { cat: 'kits', h: 'Kits & Systems', p: 'Bundles that cost less than the same items bought apart. Every saving shown is the real math.', types: ['kit'] },
     ];
     const wrap = $('[data-shop-aisles]'), chips = $('[data-shop-chips]'), easy = $('[data-shop-easy]');
     if (!wrap) return;
@@ -579,17 +579,24 @@
       const k = morph < .5 ? 'luxpro' : 'ceramicx';
       card.dataset.k = k;
       const cl = intro < 1 && morph < .5 ? 1 - intro : morph < .5 ? morph * 2 : 2 - morph * 2; // 0 bottle .. 1 molecule
-      // the real photo takes over before the particles land, so the bottle never sits there pixelated
+      // the bottle takes over before the particles land, so it never sits there pixelated.
+      // With WebGL it's the real 3D bottle, which turns a full 360 as you scroll its description and
+      // comes back face-on for the next molecule change.
       const crispA = 1 - smooth(.04, .3, cl);
-      imgs.luxpro.style.opacity = k === 'luxpro' ? crispA : 0;
-      imgs.ceramicx.style.opacity = k === 'ceramicx' ? crispA : 0;
-      // once the bottle is whole, it turns slowly on a turntable as you scroll its description
       const art = arts[k === 'luxpro' ? 0 : 1], ar = art.getBoundingClientRect();
-      const sp = clamp((innerHeight - ar.top) / (ar.height + innerHeight));
-      const ang = reduce ? 0 : Math.sin(sp * Math.PI * 2) * 32 * (1 - cl);
-      const im = imgs[k];
-      im.style.transform = `translateX(-50%) perspective(1100px) rotateY(${ang.toFixed(2)}deg)`;
-      im.style.filter = `drop-shadow(${(-ang * .5).toFixed(1)}px 26px 30px rgba(0,0,0,.55)) brightness(${(1 + ang / 220).toFixed(3)})`;
+      const vhh = innerHeight, [s0, e0] = k === 'luxpro' ? [.1, 1.15] : [.42, .95];
+      const sp = clamp((s0 * vhh - ar.top) / (s0 * vhh - e0 * vhh + ar.height));
+      const g3 = window.LL3D;
+      if (g3) {
+        g3.product(k);
+        g3.opacity(crispA);
+        g3.rotate(reduce ? 0 : ease(sp) * Math.PI * 2);
+        imgs.luxpro.style.opacity = 0; imgs.ceramicx.style.opacity = 0;
+      } else {
+        imgs.luxpro.style.opacity = k === 'luxpro' ? crispA : 0;
+        imgs.ceramicx.style.opacity = k === 'ceramicx' ? crispA : 0;
+        imgs[k].style.transform = 'translateX(-50%)';
+      }
       if (cl <= .04) return;
       project(t);
       const stick = smooth(.55, .95, cl);
