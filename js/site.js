@@ -821,7 +821,7 @@
     const PHOTO = [
       { a: 'Spencer S.', v: 1, k: 'ceramicx', t: 'Great shine and water beading', pic: 'img/rev/645ca728-0.webp' },
       { a: 'Spencer S.', v: 1, k: 'wheelassassin', t: 'Got the brake dust off my wheels and they look amazing. Great shine and easy to use.', pic: 'img/rev/2ad3f1b9-0.webp' },
-      { a: 'Jonathan', v: 0, t: 'Product is incredible..This is one of those products I was not sure about, but after trying and using unteal it Wow..High End..', pic: 'img/rev/79a0462f-1.webp' },
+      { a: 'MCH', v: 0, t: 'Top-quality products created by top-quality young men. Professional, knowledgeable, and detail-oriented. The products work exceptionally well and deliver great results. Highly recommended.' },
       { a: 'Lucas G.', v: 0, t: 'The detailing products they offer are top quality, easy to use, and deliver excellent results. From their drying towels to tire venom and protectants they have delivered great results so far.', pic: 'img/rev/246fde36-0.webp' },
     ];
     const TEXT = [
@@ -832,7 +832,7 @@
       { a: 'Zay', v: 0, t: 'I used the waterless wash and the wheel cleaner. Gave my car a deep shine and wheels looked new again.' },
       { a: 'Aidan S.', v: 1, k: 'interiorx', t: 'amazing product, works for everything and smells really good!!' },
       { a: 'Kay', v: 1, t: 'Great products, easy to use. Looks like a professional detailed my car!' },
-      { a: 'John M.', v: 0, t: 'Amazing products. Luxproand LuxFoam are my favorites. Great cleaning power, awesome scents, and professional results.' },
+      { a: 'Jeff C.', v: 1, t: 'The more products I try from this business the more I like them.' },
     ];
     const stars = '<span class="rv-stars" aria-label="5 out of 5 stars">★★★★★</span>';
     const meta = r => `<p class="rv-by"><b>${r.a}</b>${r.v ? '<span class="rv-ver">Verified buyer</span>' : ''}${r.k ? `<button type="button" class="rv-prod" data-open="${r.k}">${C[r.k].n}</button>` : ''}</p>`;
