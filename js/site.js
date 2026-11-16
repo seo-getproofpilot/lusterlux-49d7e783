@@ -66,6 +66,33 @@
   const nameHTML = k => C[k].h ? `<span class="lbl">${C[k].h}</span>` : `<span class="plain">${C[k].n}</span>`;
   const sum = ks => ks.reduce((s, k) => s + C[k].price, 0);
 
+  /* ================= JUMPS: never glide through the pinned LuxPro / CeramicX showcase =================
+     A smooth scroll that crosses it makes the pinned bottle and molecules flash past. Any jump that would cross it
+     fades out, moves instantly, and fades back in. Scrolling by hand still plays the showcase normally. */
+  const veil = document.createElement('div'); veil.className = 'jump-veil'; veil.setAttribute('aria-hidden', 'true'); document.body.appendChild(veil);
+  function jumpTo(target, offset = 80) {
+    const el = typeof target === 'string' ? $(target) : target; if (!el) return;
+    const dest = Math.max(0, el.getBoundingClientRect().top + scrollY - offset);
+    const big = $('#big') || $('.big'), b = big && big.getBoundingClientRect();
+    const crosses = b && (() => { const top = b.top + scrollY, bot = top + b.height, lo = Math.min(scrollY, dest), hi = Math.max(scrollY, dest) + innerHeight; return lo < bot && hi > top; })();
+    if (!crosses || reduce) return scrollTo({ top: dest, behavior: reduce || crosses ? 'auto' : 'smooth' });
+    veil.classList.add('on');
+    setTimeout(() => {
+      const html = document.documentElement, prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + scrollY - offset), behavior: 'instant' });
+      html.style.scrollBehavior = prev;
+      setTimeout(() => veil.classList.remove('on'), 60);
+    }, 220);
+  }
+  window.LLjump = jumpTo;
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a || a.hasAttribute('data-ics')) return;
+    const id = a.getAttribute('href'); if (id.length < 2) return;
+    const el = $(id); if (!el || el.hidden) return;
+    e.preventDefault(); jumpTo(el, id === '#picks' ? 80 : 70); history.replaceState(null, '', id);
+  });
+
   /* ================= CART (with their free-shipping line: orders $49+) ================= */
   const KEY = 'llx_cart_v1', FREE = 49;
   let cart = {};
@@ -502,7 +529,7 @@
       if (e.target.closest('[data-redo]')) { at = 0; Object.keys(ans).forEach(k => delete ans[k]); ask(); }
     });
     ask();
-    window.LLredoQuiz = () => { at = 0; Object.keys(ans).forEach(k => delete ans[k]); ask(); $('#quiz').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); };
+    window.LLredoQuiz = () => { at = 0; Object.keys(ans).forEach(k => delete ans[k]); ask(); jumpTo('#quiz', 70); };
     window.LLpick = (lv, veh, goal) => picks({ lv, veh, goal });
   })();
 
@@ -593,7 +620,7 @@
       });
     };
     render(); el.hidden = false;
-    requestAnimationFrame(() => el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }));
+    setTimeout(() => jumpTo(el, 80), 30);
   };
 
   (function shop() {
